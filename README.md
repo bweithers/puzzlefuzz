@@ -1,0 +1,1 @@
+Creating a single-page React app to be hosted on Google Firebase that will use Gemini to play 'PuzzleFuzz' a word game similar to the popular 'Codenames'.
