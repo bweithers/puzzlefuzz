@@ -1,0 +1,10 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 20px;
+    background-color: #475841; /* Feld */
+    border: 2px solid #3f403f; /* Onyx */
+    border-radius: 10px;
+  }
+  
