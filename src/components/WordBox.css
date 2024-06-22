@@ -1,0 +1,20 @@
+.word-box {
+    border: 1px solid #3f403f; /* Onyx */
+    padding: 20px;
+    margin: 5px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #A9B18F; /* Sage */
+    color: #3f403f; /* Onyx */
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  
+  .word-box:hover {
+    background-color: #CB807D; /* Rose */
+  }
+  
