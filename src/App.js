@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Codenames Game</h1>
+        <h1>Puzzle Fuzz</h1>
       </header>
       <Board words={words} />
     </div>
