@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
@@ -41,10 +42,10 @@
   <body>
     <div id="message">
       <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+      <h1>Testing One-Page App</h1>
+      <p>You're seeing this because I've changed the text.</p>
     </div>
+    <div id="root"></div>
     <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
@@ -81,6 +82,7 @@
           loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
+          console.error(app);
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
       });
