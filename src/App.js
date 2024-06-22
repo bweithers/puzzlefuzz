@@ -22,3 +22,6 @@ function App() {
 }
 
 export default App;
+
+
+console.log('Board component file.');
