@@ -17,5 +17,10 @@ firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
+export const functions = firebase.functions();
+export const storage = firebase.storage();
+export const analytics = firebase.analytics();
+export const performance = firebase.performance();
 
-console.log('Firebase init', auth, firestore);
+
+console.log('Firebase init ', auth, firestore, functions, storage, analytics, performance);
