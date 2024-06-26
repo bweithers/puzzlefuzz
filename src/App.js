@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import Board from './components/Board';
 
+
+console.log('app.js start.');
 function App() {
   const words = [
     'Word1', 'Word2', 'Word3', 'Word4', 'Word5',
