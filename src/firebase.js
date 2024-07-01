@@ -1,7 +1,6 @@
 // src/firebase.js
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import {initializeApp}  from 'firebase/app';
+import { collection, getFirestore, getDocs } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -13,14 +12,16 @@ const firebaseConfig = {
   measurementId: process.env.measurementId
 };
 
-firebase.initializeApp(firebaseConfig);
+const fb_app = initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
-export const functions = firebase.functions();
-export const storage = firebase.storage();
-export const analytics = firebase.analytics();
-export const performance = firebase.performance();
+export const firestore = getFirestore(app);
+
+async function get_collection(db) {
+    const c = collection(db, 'test');
+    const snapshot = await getDocs(c);
+    const list = snapshot.docs.map(doc => doc.data());
+    return list;
+}
 
 
-console.log('Firebase init ', auth, firestore, functions, storage, analytics, performance);
+// console.log('Firebase init ', auth, firestore, functions, storage, analytics, performance);
