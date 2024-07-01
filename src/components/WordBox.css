@@ -11,10 +11,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
   }
   
   .word-box:hover {
-    background-color: #CB807D; /* Rose */
+    background-color: #3f403f; /* Rose */
+    color: white;
+  }  
+  .word-box.pink {
+    background-color: pink;
   }
   
+  .word-box.green {
+    background-color: green;
+    color: white; /* For better visibility on green background */
+  }
