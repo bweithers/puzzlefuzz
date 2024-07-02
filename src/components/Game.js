@@ -29,7 +29,6 @@ const Game = () => {
   };
   return (
     <div className="game">
-      <h1>Codenames Game</h1>
       <Board words={words} onWordClick={handleWordClick} />
     </div>
   );
