@@ -12,9 +12,7 @@ const Game = () => {
     { text: "ENGLAND", color: "pink", revealed: false },
     { text: "FOOTBALL", color: "green", revealed: false },
     { text: "DOCTOR", color: "pink", revealed: false },
-    { text: "PLAGUE", color: "green", revealed: false },
-
-    
+    { text: "PLAGUE", color: "green", revealed: false }
     // Add more words as needed
   ]);
 
