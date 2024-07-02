@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './WordBox.css';
 
-const WordBox = ({ word, color }) => {
-  const [isRevealed, setIsRevealed] = useState(false);
-
-  const handleClick = () => {
-    setIsRevealed(true);
-  };
-
+const WordBox = ({ word, color, revealed, onClick }) => {
   return (
     <div 
-      className={`word-box ${isRevealed ? color : ''}`} 
-      onClick={handleClick}
+      className={`word-box ${revealed ? color : ''}`} 
+      onClick={onClick}
     >
       {word}
     </div>

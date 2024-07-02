@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
-import Board from './components/Board';
+import Game from './components/Game'
 
-
-console.log('app.js start.');
 function App() {
   const words = [
     { text: "APPLE", color: "pink" },
@@ -18,12 +16,9 @@ function App() {
       <header className="App-header">
         <h1>Puzzle Fuzz</h1>
       </header>
-      <Board words={words} />
+    <Game/>
     </div>
   );
 }
 
 export default App;
-
-
-console.log('Board component file.');

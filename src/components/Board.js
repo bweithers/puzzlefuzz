@@ -2,14 +2,16 @@ import React from 'react';
 import WordBox from './WordBox';
 import './Board.css';
 
-const Board = ({ words }) => {
+const Board = ({ words, onWordClick }) => {
   return (
     <div className="board">
-      {words.map((word, index, color) => (
+      {words.map((word, index) => (
         <WordBox 
           key={index} 
-          word={word} 
-          color={word.color} 
+          word={word.text} 
+          color={word.color}
+          revealed={word.revealed}
+          onClick={() => onWordClick(index)}
         />
       ))}
     </div>
