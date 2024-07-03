@@ -21,8 +21,13 @@
   .word-box.pink {
     background-color: pink;
   }
-  
+  .word-box.pink:hover {
+    color: white;
+  }
   .word-box.green {
     background-color: green;
     color: white; /* For better visibility on green background */
+  }
+  .word-box.green:hover {
+    color: black;
   }
