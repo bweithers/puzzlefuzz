@@ -11,12 +11,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.125s ease;
+    transition: transform 0.5s, box-shadow 0.3s;
   }
   
   .word-box:hover {
     background-color: #3f403f; /* Rose */
     color: white;
+    font-weight: bold;
+    transform: translate3d(-10px, -10px, 0);
+    box-shadow: 20px 20px 8px -5px papayawhip;
   }  
   .word-box.pink {
     background-color: pink;
