@@ -1,34 +1,67 @@
+/**
+ * The `Game` component is the main entry point for the game application. It is responsible for fetching the list of words, assigning colors to them, and managing the game state.
+ * 
+ * The component uses the `useState` and `useEffect` hooks to manage the state of the game, including the list of words, the number of pink and green words remaining, and the revealed state of each word.
+ * 
+ * The `fetchWordsAndSetup` function is called on component mount to fetch the list of words from a server and randomly select 20 words, assigning them colors and shuffling them. The selected words are then stored in the component's state.
+ * 
+ * The `handleWordClick` function is called when a user clicks on a word in the game board. It updates the revealed state of the clicked word and decrements the count of the corresponding color (pink or green) in the game state.
+ * 
+ * The `Game` component renders the `Board` and `ScoreTracker` components, passing the necessary props to them.
+ */
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
 
 const Game = () => {
-  const [words, setWords] = useState([
-    { text: "APPLE", color: "pink", revealed: false },
-    { text: "TREE", color: "green", revealed: false },
-    { text: "BANANA", color: "pink", revealed: false },
-    { text: "BUSH", color: "green", revealed: false },
-    { text: "ROSE", color: "pink", revealed: false },
-    { text: "GOLD", color: "green", revealed: false },
-    { text: "ENGLAND", color: "pink", revealed: false },
-    { text: "FOOTBALL", color: "green", revealed: false },
-    { text: "DOCTOR", color: "pink", revealed: false },
-    { text: "PLAGUE", color: "green", revealed: false }
-    // Add more words as needed
-  ]);
+  const [words, setWords] = useState([]);
 
   
   const [pinkLeft, setPinkLeft] = useState(0);
   const [greenLeft, setGreenLeft] = useState(0);
 
-  useEffect(() => {
-    // Count initial unrevealed words
-    const pinkCount = words.filter(word => word.color === "pink" && !word.revealed).length;
-    const greenCount = words.filter(word => word.color === "green" && !word.revealed).length;
-    setPinkLeft(pinkCount);
-    setGreenLeft(greenCount);
-  }, []);
+  const fetchWordsAndSetup = async () => {
+    try {
+      const response = await fetch('/words.txt');
+      const text = await response.text();
+      const allWords = text.split('\n').filter(word => word.trim() !== '');
+      
+      // Randomly select 20 words
+      const selectedWords = [];
+      while (selectedWords.length < 20) {
+        const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
+        if (!selectedWords.includes(randomWord)) {
+          selectedWords.push(randomWord);
+        }
+      }
 
+      // Assign colors
+      const coloredWords = selectedWords.map((word, index) => {
+        let color;
+        if (index < 8) color = 'pink';
+        else if (index < 15) color = 'green';
+        else if (index < 19) color = 'neutral';
+        else color = 'bomb';
+
+        return { text: word, color, revealed: false };
+      });
+
+      // Shuffle the colored words
+      for (let i = coloredWords.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
+      }
+
+      setWords(coloredWords);
+    } catch (error) {
+      console.error('Error fetching words:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWordsAndSetup();
+  }, []);
+  
   const handleWordClick = (index) => {
     if (!words[index].revealed) {
       console.log(`Word clicked: ${words[index].text}`);
