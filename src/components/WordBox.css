@@ -35,3 +35,12 @@
   .word-box.green:hover {
     color: black;
   }
+  
+  .word-box.neutral {
+    background-color: #f0f0f0;
+  }
+  
+  .word-box.bomb {
+    background-color: black;
+    color: white;
+  }
