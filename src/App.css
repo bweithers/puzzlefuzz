@@ -10,11 +10,18 @@
   color: #3f403f; /* Onyx */
 }
 
+.Game{
+  display: flex;
+  flex-direction: column;
+}
 .App-header {
   background-color: #A9B18F; /* Sage */
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 50px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  width: 50%;
+  align-self: center;
 }
 
 .App-header h1 {

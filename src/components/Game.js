@@ -13,54 +13,61 @@ import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
 
+const fetchWordsAndSetup = async () => {
+  try {
+    const response = await fetch('/words.txt');
+    const text = await response.text();
+    const allWords = text.split('\n').filter(word => word.trim() !== '');
+    
+    // Randomly select 20 words
+    const selectedWords = [];
+    while (selectedWords.length < 20) {
+      const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
+      if (!selectedWords.includes(randomWord)) {
+        selectedWords.push(randomWord);
+      }
+    }
+
+    // Assign colors
+    const coloredWords = selectedWords.map((word, index) => {
+      let color;
+      if (index < 8) color = 'pink';
+      else if (index < 15) color = 'green';
+      else if (index < 19) color = 'neutral';
+      else color = 'bomb';
+
+      return { text: word, color, revealed: false };
+    });
+
+    // Shuffle the colored words
+    for (let i = coloredWords.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
+    }
+
+    return coloredWords;
+  } catch (error) {
+    console.error('Error fetching words:', error);
+    return [];
+  }
+};
+
 const Game = () => {
   const [words, setWords] = useState([]);
+  const [pinkLeft, setPinkLeft] = useState(8);
+  const [greenLeft, setGreenLeft] = useState(7);
 
-  
-  const [pinkLeft, setPinkLeft] = useState(0);
-  const [greenLeft, setGreenLeft] = useState(0);
-
-  const fetchWordsAndSetup = async () => {
-    try {
-      const response = await fetch('/words.txt');
-      const text = await response.text();
-      const allWords = text.split('\n').filter(word => word.trim() !== '');
-      
-      // Randomly select 20 words
-      const selectedWords = [];
-      while (selectedWords.length < 20) {
-        const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
-        if (!selectedWords.includes(randomWord)) {
-          selectedWords.push(randomWord);
-        }
-      }
-
-      // Assign colors
-      const coloredWords = selectedWords.map((word, index) => {
-        let color;
-        if (index < 8) color = 'pink';
-        else if (index < 15) color = 'green';
-        else if (index < 19) color = 'neutral';
-        else color = 'bomb';
-
-        return { text: word, color, revealed: false };
-      });
-
-      // Shuffle the colored words
-      for (let i = coloredWords.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
-      }
-
-      setWords(coloredWords);
-    } catch (error) {
-      console.error('Error fetching words:', error);
-    }
+  const resetGame = async () => {
+    const newWords = await fetchWordsAndSetup();
+    setWords(newWords);
+    setPinkLeft(8);
+    setGreenLeft(7);
   };
 
   useEffect(() => {
-    fetchWordsAndSetup();
+    resetGame();
   }, []);
+
   
   const handleWordClick = (index) => {
     if (!words[index].revealed) {
@@ -77,8 +84,12 @@ const Game = () => {
       }
     }
   };
+
   return (
-    <div className="game">
+    <div className="Game">
+      <header className="App-header" onClick={resetGame}>
+        <h1>Puzzle Fuzz</h1>
+      </header>
       <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} />
       <Board words={words} onWordClick={handleWordClick} />
     </div>
