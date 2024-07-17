@@ -27,20 +27,36 @@
   }
   .word-box.pink:hover {
     color: white;
+    transform: none;
+    box-shadow: none;
   }
   .word-box.green {
     background-color: green;
     color: white; /* For better visibility on green background */
+    transform: none;
+    box-shadow: none;
   }
   .word-box.green:hover {
     color: black;
+    transform: none;
+    box-shadow: none;
   }
   
   .word-box.neutral {
     background-color: #f0f0f0;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .word-box.neutral:hover{
+    color: black;
+    transform: none;
+    box-shadow: none;
   }
   
   .word-box.bomb {
     background-color: black;
     color: white;
+    transform: none;
+    box-shadow: none;
   }
