@@ -67,6 +67,7 @@ const Game = () => {
     setGreenLeft(7);
     setGameOver(false);
     setWinner(null);
+    setCurrentTurn('pink');
   };
 
   useEffect(() => {
