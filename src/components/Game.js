@@ -56,12 +56,17 @@ const Game = () => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
+  const [currentTurn, setCurrentTurn] = useState('pink');
+  const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState(null);
 
   const resetGame = async () => {
     const newWords = await fetchWordsAndSetup();
     setWords(newWords);
     setPinkLeft(8);
     setGreenLeft(7);
+    setGameOver(false);
+    setWinner(null);
   };
 
   useEffect(() => {
@@ -70,19 +75,34 @@ const Game = () => {
 
   
   const handleWordClick = (index) => {
+    if (gameOver) {
+      return;
+    }
     if (!words[index].revealed) {
       console.log(`Word clicked: ${words[index].text}`);
       const newWords = [...words];
       newWords[index].revealed = true;
       setWords(newWords);
-      
+    
       // Update counts
       if (newWords[index].color === "pink") {
         setPinkLeft(prev => prev - 1);
       } else if (newWords[index].color === "green") {
         setGreenLeft(prev => prev - 1);
+      } else if (newWords[index].color === "bomb"){
+        setGameOver(true);
+        setWinner(currentTurn === "pink" ? "green" : "pink");
       }
+    // Check for game over
+    if (pinkLeft === 0 || greenLeft === 0){
+      setGameOver(true);
+      setWinner(pinkLeft === 0 ? "green" : "pink");
     }
+    if (!gameOver){
+      setCurrentTurn(currentTurn === "pink" ? "green" : "pink");
+    }
+  }
+    
   };
 
   return (
@@ -90,7 +110,9 @@ const Game = () => {
       <header className="App-header" onClick={resetGame}>
         <h1>Puzzle Fuzz</h1>
       </header>
-      <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} />
+      <div className = "info-holder">
+        <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner}/>
+      </div>
       <Board words={words} onWordClick={handleWordClick} />
     </div>
   );
