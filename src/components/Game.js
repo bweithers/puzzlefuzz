@@ -82,7 +82,7 @@ const Game = () => {
   }, [pinkLeft, greenLeft]);
 
   const revealAllWords = () => {
-    words.forEach((word, index) => {
+    words.filter( (word) => !word.revealed).forEach((word, index) => {
       setTimeout(() => {
         setWords(prevWords => {
           const newWords = [...prevWords];
