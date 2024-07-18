@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
-import Game from './components/Game'
+import Game from './components/Game';
+import Welcome from './components/Welcome';
 
 function App() {
   return (
     <div className="App">
-    <Game/>
+      <Welcome onCreateGame= {()=> null} onJoinGame={()=> null}/>
+    {/* <Game/> */}
     </div>
   );
 }
