@@ -73,34 +73,50 @@ const Game = () => {
     resetGame();
   }, []);
 
-  
+  const revealAllWords = () => {
+    words.forEach((word, index) => {
+      setTimeout(() => {
+        setWords(prevWords => {
+          const newWords = [...prevWords];
+          newWords[index].revealed = true;
+          return newWords;
+        });
+      }, index * 100); // 100ms delay between each word reveal
+    });
+  };
+
   const handleWordClick = (index) => {
     if (gameOver) {
       return;
     }
     if (!words[index].revealed) {
       console.log(`Word clicked: ${words[index].text}`);
+      const clickedColor = words[index].color;
       const newWords = [...words];
       newWords[index].revealed = true;
       setWords(newWords);
     
       // Update counts
-      if (newWords[index].color === "pink") {
+      if (clickedColor === "pink") {
         setPinkLeft(prev => prev - 1);
-      } else if (newWords[index].color === "green") {
+      } else if (clickedColor === "green") {
         setGreenLeft(prev => prev - 1);
-      } else if (newWords[index].color === "bomb"){
+      } else if (clickedColor === "bomb"){
         setGameOver(true);
         setWinner(currentTurn === "pink" ? "green" : "pink");
+        revealAllWords();
       }
-    // Check for game over
-    if (pinkLeft === 0 || greenLeft === 0){
-      setGameOver(true);
-      setWinner(pinkLeft === 0 ? "green" : "pink");
-    }
-    if (!gameOver){
-      setCurrentTurn(currentTurn === "pink" ? "green" : "pink");
-    }
+
+      // Check for game over
+      if (pinkLeft === 0 || greenLeft === 0){
+        setGameOver(true);
+        setWinner(pinkLeft === 0 ? "green" : "pink");
+        revealAllWords();
+      }
+      if (!gameOver && clickedColor !== currentTurn){
+        setCurrentTurn(currentTurn === "pink" ? "green" : "pink");
+      }
+
   }
     
   };

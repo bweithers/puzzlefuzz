@@ -13,8 +13,21 @@
     justify-content: center;
     transition: background-color 0.125s ease;
     transition: transform 0.5s, box-shadow 0.3s;
+
+    /* transition: rotateY 0.3s ease-in-out; */
+    transform: rotateY(0deg);
   }
-  
+
+  @keyframes whiteToGreen {
+    0% {
+      background: white;
+    }
+    100% {
+      background: linear-gradient(to top, limegreen, green);
+    }
+  }
+
+
   .word-box:hover {
     background-color: #3f403f; /* Rose */
     color: white;
@@ -24,6 +37,8 @@
   }  
   .word-box.pink {
     background-color: pink;
+    background: linear-gradient(to top, hotpink, pink);
+    animation: whiteToGradient 3s forwards;
   }
   .word-box.pink:hover {
     color: white;
@@ -35,6 +50,8 @@
     color: white; /* For better visibility on green background */
     transform: none;
     box-shadow: none;
+    background: linear-gradient(to top, limegreen, green);
+    animation: whiteToGradient 3s forwards;
   }
   .word-box.green:hover {
     color: black;
