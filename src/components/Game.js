@@ -73,6 +73,13 @@ const Game = () => {
     resetGame();
   }, []);
 
+  useEffect(() => {
+    if (pinkLeft === 0 || greenLeft === 0) {
+      setGameOver(true);
+      setWinner(pinkLeft === 0 ? 'pink' : 'green');
+    }
+  }, [pinkLeft, greenLeft]);
+
   const revealAllWords = () => {
     words.forEach((word, index) => {
       setTimeout(() => {
@@ -107,12 +114,6 @@ const Game = () => {
         revealAllWords();
       }
 
-      // Check for game over
-      if (pinkLeft === 0 || greenLeft === 0){
-        setGameOver(true);
-        setWinner(pinkLeft === 0 ? "green" : "pink");
-        revealAllWords();
-      }
       if (!gameOver && clickedColor !== currentTurn){
         setCurrentTurn(currentTurn === "pink" ? "green" : "pink");
       }
