@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
 
+
 const fetchWordsAndSetup = async () => {
   try {
     const response = await fetch('/words.txt');
@@ -82,14 +83,14 @@ const Game = () => {
   }, [pinkLeft, greenLeft]);
 
   const revealAllWords = () => {
-    words.filter( (word) => !word.revealed).forEach((word, index) => {
+    words.filter( (word) => !word.revealed ).forEach((word, index) => {
       setTimeout(() => {
         setWords(prevWords => {
           const newWords = [...prevWords];
           newWords[index].revealed = true;
           return newWords;
         });
-      }, index * 100); // 100ms delay between each word reveal
+      }, index * 50); // 100ms delay between each word reveal
     });
   };
 
