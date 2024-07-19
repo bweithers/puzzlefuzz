@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import './Welcome.css';
 import { firestore } from '../firebase';
-import { collection, addDoc } from 'firebase/firestore/lite';
+import { collection, setDoc, doc } from 'firebase/firestore/lite';
 import { nanoid } from 'nanoid';
 import { testFirebaseConnection } from '../firebase.js';
 
@@ -10,16 +10,16 @@ const createLobby = async () => {
     console.log('Creating lobby...');
   const lobbyCode = nanoid(6); // Generate a 6-character lobby code
   const lobbyRef = collection(firestore, 'game-lobbies');
-  
   try {
-    await addDoc(lobbyRef, {
+    const documentRef = doc(lobbyRef, lobbyCode);
+    await setDoc(documentRef, {
       LobbyCode: lobbyCode,
       CreatedAt: new Date(),
       words: [],
       assignments: []
     });
-    
-    console.log('Lobby created with code:', lobbyCode);
+
+    console.log('Lobby created:', documentRef);
     return lobbyCode;
   } catch (error) {
     console.error('Error creating lobby:', error);
