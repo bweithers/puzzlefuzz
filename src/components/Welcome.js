@@ -3,37 +3,9 @@ import './Welcome.css';
 import { firestore } from '../firebase';
 import { collection, setDoc, doc } from 'firebase/firestore/lite';
 import { nanoid } from 'nanoid';
-import { testFirebaseConnection } from '../firebase.js';
 
-const createLobby = async () => {
-// Create a new lobby
-    console.log('Creating lobby...');
-  const lobbyCode = nanoid(6); // Generate a 6-character lobby code
-  const lobbyRef = collection(firestore, 'game-lobbies');
-  try {
-    const documentRef = doc(lobbyRef, lobbyCode);
-    await setDoc(documentRef, {
-      LobbyCode: lobbyCode,
-      CreatedAt: new Date(),
-      words: [],
-      assignments: []
-    });
-
-    console.log('Lobby created:', documentRef);
-    return lobbyCode;
-  } catch (error) {
-    console.error('Error creating lobby:', error);
-    return null;
-  }
-};
-
-const Welcome = ({ onJoinGame }) => {
+const Welcome = ({ createLobby, onJoinGame }) => {
   const [joinCode, setJoinCode] = useState('');
-
-
-  useEffect(() => {
-    testFirebaseConnection();
-  }, []);
 
   const handleCreateGame = () => {
     const gameId = nanoid();

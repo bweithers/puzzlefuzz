@@ -12,9 +12,12 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
+import { doc, updateDoc, collection, getDoc} from 'firebase/firestore/lite';
+import { firestore } from '../firebase'
 
 
-const fetchWordsAndSetup = async () => {
+const fetchWordsAndSetup = async (lobbyId) => {
+  const dbRef = collection(firestore, 'game-lobbies');
   try {
     const response = await fetch('/words.txt');
     const text = await response.text();
@@ -44,8 +47,24 @@ const fetchWordsAndSetup = async () => {
     for (let i = coloredWords.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
-    }
+    };
 
+    // Write those words to this game's firebaseLobbyId
+    try{    
+      let lobbyName = lobbyId;
+      console.log('Creating DocRef ', lobbyName.lobbyCode);
+      let docRef = doc(dbRef, lobbyName.lobbyCode);
+      console.log('docRef: ',docRef);
+      let rval = await getDoc(docRef);
+      console.log('Got Lobby Doc:' ,rval);
+      await updateDoc( docRef,
+      {
+        words: coloredWords,
+      });
+  }
+  catch (error) {
+    console.error('Error updating words:', error);
+  }
     return coloredWords;
   } catch (error) {
     console.error('Error fetching words:', error);
@@ -53,7 +72,7 @@ const fetchWordsAndSetup = async () => {
   }
 };
 
-const Game = () => {
+const Game = ( lobbyId ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
@@ -62,7 +81,7 @@ const Game = () => {
   const [winner, setWinner] = useState(null);
 
   const resetGame = async () => {
-    const newWords = await fetchWordsAndSetup();
+    const newWords = await fetchWordsAndSetup(lobbyId);
     setWords(newWords);
     setPinkLeft(8);
     setGreenLeft(7);
@@ -122,6 +141,11 @@ const Game = () => {
 
   }
     
+  };
+
+  const updateWordsInFirestore = async (newWords) => {
+    const lobbyRef = doc(firestore, 'game-lobbies', lobbyId);
+    await updateDoc(lobbyRef, { words: newWords });
   };
 
   return (
