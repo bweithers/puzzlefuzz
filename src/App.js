@@ -17,8 +17,7 @@ const createLobby = async () => {
       await setDoc(documentRef, {
         LobbyCode: lobbyCode,
         CreatedAt: new Date(),
-        words: [],
-        assignments: []
+        words: []
       });
   
       console.log('Lobby created:', documentRef);

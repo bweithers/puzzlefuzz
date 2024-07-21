@@ -15,6 +15,15 @@ import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, collection, getDoc} from 'firebase/firestore/lite';
 import { firestore } from '../firebase'
 
+const updateLobbyWords = async (lobbyId, words) => {
+  const docRef = doc(firestore, 'game-lobbies', lobbyId);
+  try {
+    await updateDoc(docRef, { words: words });
+    console.log('Words updated successfully!');
+  } catch (error) {
+    console.error('Error updating words:', error);
+  }
+};
 
 const fetchWordsAndSetup = async (lobbyId) => {
   const dbRef = collection(firestore, 'game-lobbies');
@@ -50,21 +59,10 @@ const fetchWordsAndSetup = async (lobbyId) => {
     };
 
     // Write those words to this game's firebaseLobbyId
-    try{    
-      let lobbyName = lobbyId;
-      console.log('Creating DocRef ', lobbyName.lobbyCode);
-      let docRef = doc(dbRef, lobbyName.lobbyCode);
-      console.log('docRef: ',docRef);
-      let rval = await getDoc(docRef);
-      console.log('Got Lobby Doc:' ,rval);
-      await updateDoc( docRef,
-      {
-        words: coloredWords,
-      });
-  }
-  catch (error) {
-    console.error('Error updating words:', error);
-  }
+    let lobbyName = lobbyId;
+
+    updateLobbyWords(lobbyName.lobbyCode, coloredWords);
+    
     return coloredWords;
   } catch (error) {
     console.error('Error fetching words:', error);
