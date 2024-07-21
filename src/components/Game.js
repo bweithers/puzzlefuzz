@@ -141,11 +141,6 @@ const Game = ( lobbyId ) => {
     
   };
 
-  const updateWordsInFirestore = async (newWords) => {
-    const lobbyRef = doc(firestore, 'game-lobbies', lobbyId);
-    await updateDoc(lobbyRef, { words: newWords });
-  };
-
   return (
     <div className="Game">
       <header className="App-header" onClick={resetGame}>
