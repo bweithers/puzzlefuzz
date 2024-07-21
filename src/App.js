@@ -2,6 +2,7 @@ import React, { useState, useEffect }from 'react';
 import './App.css';
 import Game from './components/Game';
 import Welcome from './components/Welcome';
+import ClueGiver from './components/ClueGiver';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore/lite';
@@ -42,11 +43,14 @@ const createLobby = async () => {
   
     return (
       <div className="App">
-        {lobbyCode ? (
-          <Game lobbyCode={lobbyCode} />
-        ) : (
-          <div>Creating lobby...</div>
-        )}
+        <div className="game-container">
+          {lobbyCode ? (
+            <Game lobbyCode={lobbyCode} />
+          ) : (
+            <div>Creating lobby...</div>
+          )}
+          <ClueGiver hint="test"/>
+        </div>
       </div>
     );
   }

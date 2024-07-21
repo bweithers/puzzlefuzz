@@ -56,3 +56,8 @@
 .App-header:hover::after {
   opacity: 1;
 }
+
+.ClueGiver {
+  margin-left: 0px; /* Adds some space between Game and ClueGiver */
+  flex: 0 0 300px; /* Adjust width as needed */
+}
