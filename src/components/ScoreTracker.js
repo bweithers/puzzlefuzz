@@ -7,7 +7,12 @@ const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, setC
     if (gameOver) {
       return <span className={`status-value game-over ${winner}`}>{winner} team wins!</span>;
     } else {
-      return <span className={`status-value ${currentTurn}`}>{currentTurn}'s turn</span>;
+      return ( 
+      <> 
+        <span className={`status-value ${currentTurn}`}>{currentTurn}'s turn</span> 
+        <br></br>
+        <span className="end-turn-text">Click to end turn</span>
+      </>);
     }
   };
 
@@ -26,7 +31,7 @@ const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, setC
       </div>
 
       <div className="GameStatus">
-        {getStatusValue()} <br></br>Click to end turn.
+        {getStatusValue()}
       </div>
 
       <div className="score green">
