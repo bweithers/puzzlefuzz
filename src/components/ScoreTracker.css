@@ -4,6 +4,7 @@
   align-items: center;
   margin-bottom: 10px;
   user-select: none;
+  cursor: pointer;
 }
 
 .score {
@@ -42,12 +43,13 @@
   text-align: center;
   flex-grow: 1;
   background-color: whitesmoke;
-  width: 160px;
+  width: 200px;
   margin-top: 25px;
+  font-size: 12px;
 }
 
 .status-value {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: bold;
 }
 
