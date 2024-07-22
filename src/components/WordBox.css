@@ -13,7 +13,7 @@
     justify-content: center;
     transition: background-color 0.125s ease;
     transition: transform 0.5s, box-shadow 0.3s;
-
+    user-select: none;
     /* transition: rotateY 0.3s ease-in-out; */
     transform: rotateY(0deg);
   }
@@ -39,6 +39,7 @@
     background-color: pink;
     background: linear-gradient(to top, hotpink, pink);
     animation: whiteToGradient 3s forwards;
+    font-weight: bold;
   }
   .word-box.pink:hover {
     color: white;
@@ -52,6 +53,7 @@
     box-shadow: none;
     background: linear-gradient(to top, limegreen, green);
     animation: whiteToGradient 3s forwards;
+    font-weight: bold;
   }
   .word-box.green:hover {
     color: black;
@@ -63,12 +65,14 @@
     background-color: #f0f0f0;
     transform: none;
     box-shadow: none;
+    font-weight: bold;
   }
 
   .word-box.neutral:hover{
     color: black;
     transform: none;
     box-shadow: none;
+    font-weight: bold;
   }
   
   .word-box.bomb {
@@ -76,4 +80,5 @@
     color: white;
     transform: none;
     box-shadow: none;
+    font-weight: bolder;
   }

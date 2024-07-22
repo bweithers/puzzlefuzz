@@ -99,16 +99,14 @@ const Game = ( lobbyId ) => {
     }
   }, [pinkLeft, greenLeft]);
 
+  useEffect (()=>{
+    if (!gameOver) return;
+    revealAllWords();
+  }, [gameOver]);
+
+
   const revealAllWords = () => {
-    words.filter( (word) => !word.revealed ).forEach((word, index) => {
-      setTimeout(() => {
-        setWords(prevWords => {
-          const newWords = [...prevWords];
-          newWords[index].revealed = true;
-          return newWords;
-        });
-      }, index * 50); // 100ms delay between each word reveal
-    });
+    setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
   };
 
   const handleWordClick = (index) => {
@@ -130,7 +128,6 @@ const Game = ( lobbyId ) => {
       } else if (clickedColor === "bomb"){
         setGameOver(true);
         setWinner(currentTurn === "pink" ? "green" : "pink");
-        revealAllWords();
       }
 
       if (!gameOver && clickedColor !== currentTurn){
@@ -147,9 +144,9 @@ const Game = ( lobbyId ) => {
         <h1>Puzzle Fuzz</h1>
       </header>
       <div className = "info-holder">
-        <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner}/>
+        <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} setCurrentTurn= {setCurrentTurn} />
       </div>
-      <Board words={words} onWordClick={handleWordClick} />
+      <Board words={words} onWordClick={handleWordClick} gameOver={gameOver}/>
     </div>
   );
 };
