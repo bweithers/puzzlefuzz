@@ -4,7 +4,7 @@ import './Board.css';
 
 const Board = ({ words, onWordClick, gameOver}) => {
   return (
-    <div className="board">
+    <div className={`board ${gameOver ? 'game-over' : ''}`}>
       {words.map((word, index) => (
         <WordBox 
           key={index} 

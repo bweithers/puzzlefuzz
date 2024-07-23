@@ -13,6 +13,7 @@
   }
   
   /* Apply blur to all WordBox elements except the one being hovered */
-  .board:hover .word-box:not(:hover) {
+  .board:not(.game-over):hover .word-box:not(:hover) {
     filter: blur(1px);
   }
+    
