@@ -49,7 +49,7 @@ const createLobby = async () => {
           ) : (
             <div>Creating lobby...</div>
           )}
-          <ClueGiver hint="test"/>
+          <ClueGiver lobbyCode={lobbyCode}/>
         </div>
       </div>
     );

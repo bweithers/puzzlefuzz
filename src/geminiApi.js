@@ -7,8 +7,9 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"
 
 
 
-const Request_Clue = async() =>{ 
-    const prompt = "Words to use: ['Woman', 'Car', 'USA']; Words to avoid: ['Cherry', 'Blueberry', 'Strawberry']";
+const Request_Clue = async(lobbyCode) =>{ 
+    // const prompt = "Words to use: ['Woman', 'Car', 'USA']; Words to avoid: ['Cherry', 'Blueberry', 'Strawberry']";
+    
 
     const result = await model.generateContent(prompt);
     console.log(result.response.text());
