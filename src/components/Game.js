@@ -15,17 +15,20 @@ import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, collection, getDoc} from 'firebase/firestore/lite';
 import { firestore } from '../firebase'
 
-const updateLobbyWords = async (lobbyId, words) => {
+const updateLobby = async (lobbyId, words, currentTurn) => {
   const docRef = doc(firestore, 'game-lobbies', lobbyId);
   try {
-    await updateDoc(docRef, { words: words });
+    await updateDoc(docRef, { words: words,
+      currentTurn: currentTurn
+     });
     console.log('Words updated successfully!');
   } catch (error) {
     console.error('Error updating words:', error);
   }
 };
 
-const fetchWordsAndSetup = async (lobbyId) => {
+
+const fetchWordsAndSetup = async () => {
   const dbRef = collection(firestore, 'game-lobbies');
   try {
     const response = await fetch('/words.txt');
@@ -57,11 +60,6 @@ const fetchWordsAndSetup = async (lobbyId) => {
       const j = Math.floor(Math.random() * (i + 1));
       [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
     };
-
-    // Write those words to this game's firebaseLobbyId
-    let lobbyName = lobbyId;
-
-    updateLobbyWords(lobbyName.lobbyCode, coloredWords);
     
     return coloredWords;
   } catch (error) {
@@ -104,6 +102,11 @@ const Game = ( lobbyId ) => {
     revealAllWords();
   }, [gameOver]);
 
+  useEffect(() =>{
+        let lobbyName = lobbyId;
+        updateLobby(lobbyName.lobbyCode, coloredWords, currentTurn);
+  } 
+  , [words]);
 
   const revealAllWords = () => {
     setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
