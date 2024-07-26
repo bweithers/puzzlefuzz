@@ -104,7 +104,7 @@ const Game = ( lobbyId ) => {
 
   useEffect(() =>{
         let lobbyName = lobbyId;
-        updateLobby(lobbyName.lobbyCode, coloredWords, currentTurn);
+        updateLobby(lobbyName.lobbyCode, words, currentTurn);
   } 
   , [words]);
 
