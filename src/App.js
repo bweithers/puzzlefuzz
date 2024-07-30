@@ -49,7 +49,7 @@ const createLobby = async () => {
           ) : (
             <div>Creating lobby...</div>
           )}
-          <ClueGiver lobbyCode={lobbyCode}/>
+          {lobbyCode ? (<ClueGiver lobbyCode={lobbyCode}/>) : (<div>Lobby not created yet.</div>)}
         </div>
       </div>
     );
