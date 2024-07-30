@@ -1,7 +1,7 @@
 import React from 'react';
 import './ScoreTracker.css';
 
-const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, setCurrentTurn}) => {
+const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, endTurn}) => {
 
   const getStatusValue = () => {
     if (gameOver) {
@@ -19,7 +19,7 @@ const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, setC
 
   const handleTurnSwitch = () => {
     if (!gameOver) {
-      setCurrentTurn(currentTurn === 'pink' ? 'green' : 'pink');
+      endTurn(currentTurn);
     }
   };
 

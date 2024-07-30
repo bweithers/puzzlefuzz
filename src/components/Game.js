@@ -68,11 +68,10 @@ const fetchWordsAndSetup = async () => {
   }
 };
 
-const Game = ( {lobbyCode} ) => {
+const Game = ( {lobbyCode, currentTurn, endTurn} ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
-  const [currentTurn, setCurrentTurn] = useState('pink');
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
@@ -83,7 +82,7 @@ const Game = ( {lobbyCode} ) => {
     setGreenLeft(7);
     setGameOver(false);
     setWinner(null);
-    setCurrentTurn('pink');
+    endTurn('green');
   };
 
   useEffect(() => {
@@ -134,7 +133,7 @@ const Game = ( {lobbyCode} ) => {
       }
 
       if (!gameOver && clickedColor !== currentTurn){
-        setCurrentTurn(currentTurn === "pink" ? "green" : "pink");
+        endTurn(currentTurn);
       }
 
   }
@@ -147,7 +146,7 @@ const Game = ( {lobbyCode} ) => {
         <h1>Puzzle Fuzz</h1>
       </header>
       <div className = "info-holder">
-        <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} setCurrentTurn= {setCurrentTurn} />
+        <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} endTurn= {endTurn} />
       </div>
       <Board words={words} onWordClick={handleWordClick} gameOver={gameOver}/>
     </div>
