@@ -32,6 +32,7 @@ const createLobby = async () => {
   function App() {
     const [lobbyCode, setLobbyCode] = useState(null);
     const [currentTurn, setCurrentTurn] = useState('pink');
+    const [gameOver, setGameOver] = useState(false);
     
     useEffect(() => {
       createLobby().then(code => {
@@ -49,7 +50,7 @@ const createLobby = async () => {
       <div className="App">
         <div className="game-container">
           {lobbyCode ? (
-            <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn}/>
+            <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} gameOver={gameOver} setGameOver={setGameOver} />
           ) : (
             <div>Creating lobby...</div>
           )}

@@ -68,11 +68,10 @@ const fetchWordsAndSetup = async () => {
   }
 };
 
-const Game = ( {lobbyCode, currentTurn, endTurn} ) => {
+const Game = ( {lobbyCode, currentTurn, endTurn , gameOver, setGameOver} ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
-  const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
   const resetGame = async () => {
