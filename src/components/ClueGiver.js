@@ -2,10 +2,14 @@ import { React, useState, useEffect } from 'react';
 import './ClueGiver.css';
 import Request_Clue from '../geminiApi.js'
 
-const ClueGiver = ({ lobbyCode, currentTurn }) => {
+const ClueGiver = ({ lobbyCode, currentTurn, gameOver}) => {
   const [hint, setHint] = useState(null);
 
   useEffect(() => {
+    if (gameOver){
+      setHint('Game Over!');
+      return;
+    }
     setHint('Thinking...');
     const fetchHint = async() => {
       const hintResult = await Request_Clue(lobbyCode, currentTurn);
@@ -14,7 +18,7 @@ const ClueGiver = ({ lobbyCode, currentTurn }) => {
     }
     fetchHint();
     // console.log(hint);
-  }, [currentTurn]);
+  }, [currentTurn, gameOver]);
   // setHint(Request_Clue(lobbyCode));
 
   const [hintWord, hintCount, clueText] = hint ? hint.split(',', 3) : [null, null, null];
