@@ -15,8 +15,8 @@ import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, collection, getDoc} from 'firebase/firestore/lite';
 import { firestore } from '../firebase'
 
-const updateLobby = async (lobbyId, words, currentTurn) => {
-  const docRef = doc(firestore, 'game-lobbies', lobbyId);
+const updateLobby = async (lobbyCode, words, currentTurn) => {
+  const docRef = doc(firestore, 'game-lobbies', lobbyCode);
   try {
     await updateDoc(docRef, { words: words,
       currentTurn: currentTurn
@@ -68,7 +68,7 @@ const fetchWordsAndSetup = async () => {
   }
 };
 
-const Game = ( lobbyId ) => {
+const Game = ( {lobbyCode} ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
@@ -77,7 +77,7 @@ const Game = ( lobbyId ) => {
   const [winner, setWinner] = useState(null);
 
   const resetGame = async () => {
-    const newWords = await fetchWordsAndSetup(lobbyId);
+    const newWords = await fetchWordsAndSetup(lobbyCode);
     setWords(newWords);
     setPinkLeft(8);
     setGreenLeft(7);
@@ -103,10 +103,10 @@ const Game = ( lobbyId ) => {
   }, [gameOver]);
 
   useEffect(() =>{
-        let lobbyName = lobbyId;
-        updateLobby(lobbyName.lobbyCode, words, currentTurn);
+        updateLobby(lobbyCode, words, currentTurn);
   } 
-  , [words]);
+  , [words, currentTurn]);
+
 
   const revealAllWords = () => {
     setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
