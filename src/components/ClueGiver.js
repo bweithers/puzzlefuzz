@@ -12,12 +12,12 @@ const ClueGiver = ({ lobbyCode }) => {
       setHint(cleanedHint);
     }
     fetchHint();
-    console.log(hint);
+    // console.log(hint);
   }, []);
   // setHint(Request_Clue(lobbyCode));
 
   const [hintWord, hintCount, clueText] = hint ? hint.split(',', 3) : [null, null, null];
-  console.log(typeof hintWord);
+  // console.log(typeof hintWord);
   return (
     <div className="clue-giver">
       <h2>ClueGiver Hint</h2>
