@@ -79,6 +79,7 @@ const Game = ( {lobbyCode, currentTurn, endTurn , gameOver, setGameOver} ) => {
     setWords(newWords);
     setPinkLeft(8);
     setGreenLeft(7);
+    setGameOver(true);
     setGameOver(false);
     setWinner(null);
     endTurn('green');
