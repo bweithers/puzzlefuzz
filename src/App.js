@@ -6,6 +6,7 @@ import ClueGiver from './components/ClueGiver';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore/lite';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 const createLobby = async () => {
@@ -48,16 +49,24 @@ const createLobby = async () => {
 
     return (
       <div className="App">
-        <div className="game-container">
-          {lobbyCode ? (
-            <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} gameOver={gameOver} setGameOver={setGameOver} />
-          ) : (
-            <div>Creating lobby...</div>
-          )}
-          {lobbyCode ? (<ClueGiver lobbyCode={lobbyCode} currentTurn={currentTurn}/>) : (<div>Lobby not created yet.</div>)}
-        </div>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/:lobbyCode" element={
+              <div className="game-container">
+                {lobbyCode ? (
+                  <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} gameOver={gameOver} setGameOver={setGameOver} />
+                ) : (
+                  <div>Creating lobby...</div>
+                )}
+                {lobbyCode ? (<ClueGiver lobbyCode={lobbyCode} currentTurn={currentTurn}/>) : (<div>Lobby not created yet.</div>)}
+              </div>
+            } />
+          </Routes>
+        </Router>
       </div>
     );
+    
   }
   
   export default App;
