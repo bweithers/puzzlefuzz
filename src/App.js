@@ -5,7 +5,7 @@ import Welcome from './components/Welcome';
 import ClueGiver from './components/ClueGiver';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
-import { collection, doc, setDoc } from 'firebase/firestore/lite';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -55,7 +55,7 @@ const createLobby = async () => {
             <Route path="/:lobbyCode" element={
               <div className="game-container">
                 {lobbyCode ? (
-                  <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} gameOver={gameOver} setGameOver={setGameOver} />
+                  <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} setCurrentTurn={setCurrentTurn} gameOver={gameOver} setGameOver={setGameOver} />
                 ) : (
                   <div>Creating lobby...</div>
                 )}

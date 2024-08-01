@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import './Welcome.css';
 import { firestore } from '../firebase';
-import { collection, getDoc, doc } from 'firebase/firestore/lite';
+import { collection, getDoc, doc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import { useNavigate } from 'react-router-dom';
 

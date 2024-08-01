@@ -12,8 +12,9 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
-import { doc, updateDoc, collection, getDoc} from 'firebase/firestore/lite';
-import { firestore } from '../firebase'
+
+import { doc, updateDoc, collection, getDoc, onSnapshot, query, where} from "firebase/firestore";
+import { firestore } from '../firebase';
 
 const updateLobby = async (lobbyCode, words, currentTurn) => {
   const docRef = doc(firestore, 'game-lobbies', lobbyCode);
@@ -68,7 +69,7 @@ const fetchWordsAndSetup = async () => {
   }
 };
 
-const Game = ( {lobbyCode, currentTurn, endTurn , gameOver, setGameOver} ) => {
+const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setGameOver} ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
@@ -84,6 +85,34 @@ const Game = ( {lobbyCode, currentTurn, endTurn , gameOver, setGameOver} ) => {
     setWinner(null);
     endTurn('green');
   };
+
+  const startFirstGame = async () => {
+    const newWords = await fetchWordsAndSetup(lobbyCode);
+    setWords(newWords);
+    setPinkLeft(8);
+    setGreenLeft(7);
+    setGameOver(false);
+    setWinner(null);
+  };
+
+  useEffect(() => {
+    const lobbiesRef = collection(firestore, 'game-lobbies');
+    const q = query(lobbiesRef, where('LobbyCode', '==', lobbyCode));
+    console.log('snapshot listener');
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        setWords(data.words);
+        setPinkLeft(data.pinkLeft);
+        setGreenLeft(data.greenLeft);
+        setCurrentTurn(data.currentTurn);
+        setGameOver(data.gameOver);
+        setWinner(data.winner);
+      });
+    });
+  
+    return () => unsubscribe();
+  }, [lobbyCode]);
 
   useEffect(() => {
     resetGame();
@@ -102,7 +131,7 @@ const Game = ( {lobbyCode, currentTurn, endTurn , gameOver, setGameOver} ) => {
   }, [gameOver]);
 
   useEffect(() =>{
-        updateLobby(lobbyCode, words, currentTurn);
+      updateLobby(lobbyCode, words, currentTurn);
   } 
   , [words, currentTurn]);
 

@@ -1,5 +1,5 @@
 // src/geminiApi.js
-import { collection, doc, getDoc } from 'firebase/firestore/lite';
+import { collection, doc, getDoc } from 'firebase/firestore';
 import { firestore } from './firebase';
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -13,6 +13,9 @@ const getLobbyDoc = async (lobbyCode) => {
   const dbRef = collection(firestore, 'game-lobbies');
   const documentRef = doc(dbRef, lobbyCode);
   const lobbyDoc = await getDoc(documentRef);
+  if (lobbyDoc.data().words && lobbyDoc.data().words.length === 0) {
+    console.log('Pinged lobby successfully but no words found.');
+  }
   return lobbyDoc;
 }
 
