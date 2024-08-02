@@ -16,54 +16,14 @@ import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, collection, getDoc, onSnapshot, query, where} from "firebase/firestore";
 import { firestore } from '../firebase';
 
-
-
-const fetchWordsAndSetup = async () => {
-  const dbRef = collection(firestore, 'game-lobbies');
-  try {
-    const response = await fetch('/words.txt');
-    const text = await response.text();
-    const allWords = text.split('\n').filter(word => word.trim() !== '');
-    
-    // Randomly select 20 words
-    const selectedWords = [];
-    while (selectedWords.length < 20) {
-      const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
-      if (!selectedWords.includes(randomWord)) {
-        selectedWords.push(randomWord);
-      }
-    }
-
-    // Assign colors
-    const coloredWords = selectedWords.map((word, index) => {
-      let color;
-      if (index < 8) color = 'pink';
-      else if (index < 15) color = 'green';
-      else if (index < 19) color = 'neutral';
-      else color = 'bomb';
-
-      return { text: word, color, revealed: false };
-    });
-
-    // Shuffle the colored words
-    for (let i = coloredWords.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
-    };
-    
-    return coloredWords;
-  } catch (error) {
-    console.error('Error fetching words:', error);
-    return [];
-  }
-};
-
 const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setGameOver} ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
   const [winner, setWinner] = useState(null);
 
+  const lobbiesRef = collection(firestore, 'game-lobbies');
+  
   const resetGame = async () => {
     const newWords = await fetchWordsAndSetup(lobbyCode);
     setWords(newWords);
@@ -85,7 +45,6 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   };
 
   useEffect(() => {
-    const lobbiesRef = collection(firestore, 'game-lobbies');
     const q = query(lobbiesRef, where('LobbyCode', '==', lobbyCode));
     console.log('snapshot listener');
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -125,6 +84,45 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   , [words]);
 
 
+    
+  const fetchWordsAndSetup = async () => {
+    try {
+      const response = await fetch('/words.txt');
+      const text = await response.text();
+      const allWords = text.split('\n').filter(word => word.trim() !== '');
+      
+      // Randomly select 20 words
+      const selectedWords = [];
+      while (selectedWords.length < 20) {
+        const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
+        if (!selectedWords.includes(randomWord)) {
+          selectedWords.push(randomWord);
+        }
+      }
+
+      // Assign colors
+      const coloredWords = selectedWords.map((word, index) => {
+        let color;
+        if (index < 8) color = 'pink';
+        else if (index < 15) color = 'green';
+        else if (index < 19) color = 'neutral';
+        else color = 'bomb';
+
+        return { text: word, color, revealed: false };
+      });
+
+      // Shuffle the colored words
+      for (let i = coloredWords.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
+      };
+      
+      return coloredWords;
+    } catch (error) {
+      console.error('Error fetching words:', error);
+      return [];
+    }
+  };
   const revealAllWords = () => {
     setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
   };
