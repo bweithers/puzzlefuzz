@@ -34,15 +34,7 @@ const createLobby = async () => {
     const [lobbyCode, setLobbyCode] = useState(null);
     const [currentTurn, setCurrentTurn] = useState('pink');
     const [gameOver, setGameOver] = useState(false);
-    
-    useEffect(() => {
-      createLobby().then(code => {
-        setLobbyCode(code);
-        console.log('Lobby Code:', code);
-      }).catch(error => {
-        console.error('Error creating lobby:', error);
-      });
-    }, []);
+
     function endTurn(turn){
       setCurrentTurn(turn === 'green' ? 'pink' : 'green');
     }
@@ -51,7 +43,7 @@ const createLobby = async () => {
       <div className="App">
         <Router>
           <Routes>
-            <Route path="/" element={<Welcome />} />
+            <Route path="/" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} />
             <Route path="/:lobbyCode" element={
               <div className="game-container">
                 {lobbyCode ? (
