@@ -130,6 +130,9 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   };
 
   const updateLobby = async () => {
+    if (words.length === 0) {
+      return;
+    }
     const docRef = doc(firestore, 'game-lobbies', lobbyCode);
     try {
       await updateDoc(docRef, { words: words,
