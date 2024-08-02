@@ -16,17 +16,6 @@ import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, collection, getDoc, onSnapshot, query, where} from "firebase/firestore";
 import { firestore } from '../firebase';
 
-const updateLobby = async (lobbyCode, words, currentTurn) => {
-  const docRef = doc(firestore, 'game-lobbies', lobbyCode);
-  try {
-    await updateDoc(docRef, { words: words,
-      currentTurn: currentTurn
-     });
-    console.log('Words updated successfully!');
-  } catch (error) {
-    console.error('Error updating words:', error);
-  }
-};
 
 
 const fetchWordsAndSetup = async () => {
@@ -131,14 +120,29 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   }, [gameOver]);
 
   useEffect(() =>{
-      updateLobby(lobbyCode, words, currentTurn);
+      updateLobby();
   } 
-  , [words, currentTurn]);
+  , [words]);
 
 
   const revealAllWords = () => {
     setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
   };
+
+  const updateLobby = async () => {
+    const docRef = doc(firestore, 'game-lobbies', lobbyCode);
+    try {
+      await updateDoc(docRef, { words: words,
+        currentTurn: currentTurn,
+        greenLeft: greenLeft,
+        pinkLeft: pinkLeft
+       });
+      console.log('Words updated successfully!');
+    } catch (error) {
+      console.error('Error updating words:', error);
+    }
+  };
+  
 
   const handleWordClick = (index) => {
     if (gameOver) {
