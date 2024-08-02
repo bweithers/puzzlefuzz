@@ -28,9 +28,13 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
       }).catch(error => {
         console.error('Error creating lobby:', error);
       });
-      navigate(`/${lobbyCode}`);
+      
   };
-
+  useEffect(() => {
+    if (lobbyCode) {
+      navigate(`/${lobbyCode}`);
+    }
+  }, [lobbyCode]);
   const history = useNavigate();
 
   const createLobby = async () => {
