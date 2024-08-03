@@ -10,10 +10,12 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
   
   const navigate = useNavigate();
   const onJoinGame = async (code) => {
+    setLobbyCode(joinCode);
     const dbRef = collection(firestore, 'game-lobbies');
     const documentRef = doc(dbRef, code);
     let gamedoc = await getDoc(documentRef);
-    navigate(`/${code}`);
+    console.log(joinCode,gamedoc.document_);
+    // navigate(`/${code}`);
   };
 
   const handleJoinGame = () => {
