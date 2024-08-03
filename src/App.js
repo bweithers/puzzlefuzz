@@ -6,7 +6,7 @@ import ClueGiver from './components/ClueGiver';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
 
 const createLobby = async () => {
@@ -39,26 +39,27 @@ const createLobby = async () => {
       setCurrentTurn(turn === 'green' ? 'pink' : 'green');
     }
 
+    const GameRoute = () => {
+      const { lobbyCode } = useParams();
+      return (
+        <div className="game-container">
+          <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} setCurrentTurn={setCurrentTurn} gameOver={gameOver} setGameOver={setGameOver} />
+          <ClueGiver lobbyCode={lobbyCode} currentTurn={currentTurn} gameOver={gameOver}/>
+        </div>
+      );
+    };
+
     return (
       <div className="App">
         <Router>
           <Routes>
             <Route path="/" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} />
-            <Route path="/:lobbyCode" element={
-              <div className="game-container">
-                {lobbyCode ? (
-                  <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} setCurrentTurn={setCurrentTurn} gameOver={gameOver} setGameOver={setGameOver} />
-                ) : (
-                  <div>Creating lobby...</div>
-                )}
-                {lobbyCode ? (<ClueGiver lobbyCode={lobbyCode} currentTurn={currentTurn} gameOver={gameOver}/>) : (<div>Lobby not created yet.</div>)}
-              </div>
-            } />
+            <Route path="/:lobbyCode" element={<GameRoute />} />
           </Routes>
         </Router>
       </div>
     );
-    
+
   }
   
   export default App;
