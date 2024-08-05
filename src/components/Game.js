@@ -12,7 +12,7 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
-
+import { useParams } from 'react-router-dom';
 import { doc, updateDoc, collection, getDoc, onSnapshot, query, where} from "firebase/firestore";
 import { firestore } from '../firebase';
 
@@ -21,11 +21,11 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
   const [winner, setWinner] = useState(null);
-
   const lobbiesRef = collection(firestore, 'game-lobbies');
-  
+  const docRef = doc(firestore, 'game-lobbies', lobbyCode);
+
   const resetGame = async () => {
-    const newWords = await fetchWordsAndSetup(lobbyCode);
+    const newWords = await fetchWordsAndSetup();
     setWords(newWords);
     setPinkLeft(8);
     setGreenLeft(7);
@@ -33,38 +33,32 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
     setGameOver(false);
     setWinner(null);
     endTurn('green');
-  };
-
-  const startFirstGame = async () => {
-    const newWords = await fetchWordsAndSetup(lobbyCode);
-    setWords(newWords);
-    setPinkLeft(8);
-    setGreenLeft(7);
-    setGameOver(false);
-    setWinner(null);
+    updateLobby(newWords, 8, 7);
   };
 
   useEffect(() => {
-    const q = query(lobbiesRef, where('LobbyCode', '==', lobbyCode));
-    console.log('snapshot listener');
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        setWords(data.words);
-        setPinkLeft(data.pinkLeft);
-        setGreenLeft(data.greenLeft);
-        setCurrentTurn(data.currentTurn);
-        setGameOver(data.gameOver);
-        setWinner(data.winner);
-      });
-    });
+    const fetchInitialData = async () => {
+      const docSnap = await getDoc(docRef);   
+      if (docSnap.exists() && docSnap.data().words && docSnap.data().words.length > 0) {
+        // If words exist in the database, use them
+        setWords(docSnap.data().words);
+        setPinkLeft(docSnap.data().pinkLeft);
+        setGreenLeft(docSnap.data().greenLeft);
+        console.log('Words fetched from database');
+      } else {
+        // If no words in the database, create new ones
+        const newWords = await fetchWordsAndSetup();
+        setWords(newWords);
+        setPinkLeft(8);
+        setGreenLeft(7);
+        updateLobby(newWords, 8, 7);
+        console.log('First time setup, words pulled here');
+      }
+    };
   
-    return () => unsubscribe();
-  }, [lobbyCode]);
-
-  useEffect(() => {
-    resetGame();
+    fetchInitialData();
   }, []);
+
 
   useEffect(() => {
     if (pinkLeft === 0 || greenLeft === 0) {
@@ -78,13 +72,8 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
     revealAllWords();
   }, [gameOver]);
 
-  useEffect(() =>{
-      updateLobby();
-  } 
-  , [words]);
 
 
-    
   const fetchWordsAndSetup = async () => {
     try {
       const response = await fetch('/words.txt');
@@ -127,24 +116,25 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
     setWords(prevWords => prevWords.map(word => ({ ...word, revealed: true })));
   };
 
-  const updateLobby = async () => {
-    if (words.length === 0) {
-      return;
-    }
+  useEffect(() =>{
+      updateLobby();
+  } 
+  , [words]);
+  const updateLobby = async (updatedWords, updatedPinkLeft, updatedGreenLeft) => {
     const docRef = doc(firestore, 'game-lobbies', lobbyCode);
     try {
-      await updateDoc(docRef, { words: words,
+      await updateDoc(docRef, { 
+        words: updatedWords,
         currentTurn: currentTurn,
-        greenLeft: greenLeft,
-        pinkLeft: pinkLeft
-       });
+        greenLeft: updatedGreenLeft,
+        pinkLeft: updatedPinkLeft
+      });
       console.log('Words updated successfully!');
     } catch (error) {
       console.error('Error updating words:', error);
     }
   };
   
-
   const handleWordClick = (index) => {
     if (gameOver) {
       return;
