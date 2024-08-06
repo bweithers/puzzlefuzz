@@ -16,13 +16,24 @@ import { useParams } from 'react-router-dom';
 import { doc, updateDoc, collection, getDoc, onSnapshot, query, where} from "firebase/firestore";
 import { firestore } from '../firebase';
 
-const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setGameOver} ) => {
+const Game = ( { lobbyCode } ) => {
   const [words, setWords] = useState([]);
   const [pinkLeft, setPinkLeft] = useState(8);
   const [greenLeft, setGreenLeft] = useState(7);
   const [winner, setWinner] = useState(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [currentTurn, setCurrentTurn] = useState('pink');
+
   const lobbiesRef = collection(firestore, 'game-lobbies');
   const docRef = doc(firestore, 'game-lobbies', lobbyCode);
+
+  function endTurn() {
+    if (currentTurn === 'pink') {
+      setCurrentTurn('green');
+    } else {
+      setCurrentTurn('pink');
+    }
+  };
 
   const resetGame = async () => {
     const newWords = await fetchWordsAndSetup();
@@ -47,6 +58,7 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
         console.log('Words fetched from database');
       } else {
         // If no words in the database, create new ones
+        console.log(docSnap?.data());
         const newWords = await fetchWordsAndSetup();
         setWords(newWords);
         setPinkLeft(8);
@@ -117,21 +129,22 @@ const Game = ( {lobbyCode, currentTurn, setCurrentTurn, endTurn , gameOver, setG
   };
 
   useEffect(() =>{
-      updateLobby();
+      updateLobby(words, pinkLeft);
   } 
   , [words]);
-  const updateLobby = async (updatedWords, updatedPinkLeft, updatedGreenLeft) => {
+  const updateLobby = async () => {
     const docRef = doc(firestore, 'game-lobbies', lobbyCode);
     try {
       await updateDoc(docRef, { 
-        words: updatedWords,
+        words: words,
         currentTurn: currentTurn,
-        greenLeft: updatedGreenLeft,
-        pinkLeft: updatedPinkLeft
+        greenLeft: greenLeft,
+        pinkLeft: pinkLeft
       });
       console.log('Words updated successfully!');
     } catch (error) {
       console.error('Error updating words:', error);
+      console.error('Words: ', words, ', Pink Left: ',pinkLeft, ', Green Left: ', greenLeft, ', Current Turn: ', currentTurn);
     }
   };
   

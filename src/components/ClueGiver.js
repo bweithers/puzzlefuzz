@@ -1,25 +1,46 @@
 import { React, useState, useEffect } from 'react';
 import './ClueGiver.css';
-import Request_Clue from '../geminiApi.js'
+import Request_Clue from '../geminiApi.js';
+import {doc, onSnapshot} from 'firebase/firestore';
+import { firestore } from '../firebase';
 
-const ClueGiver = ({ lobbyCode, currentTurn, gameOver}) => {
+const ClueGiver = ({ lobbyCode }) => {
   const [hint, setHint] = useState(null);
+  const [gameState, setGameState] = useState(null);
+  const [currentTurn, setCurrentTurn] = useState(null);
 
   useEffect(() => {
-    if (gameOver){
+    const lobbyRef = doc(firestore, 'game-lobbies', lobbyCode);
+    const unsubscribe = onSnapshot(lobbyRef, (doc) => {
+      if (doc.exists()) {
+        const newGameState = doc.data();
+        setGameState(newGameState);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [lobbyCode]);
+  
+  useEffect(()=>{
+    if (gameState && gameState.currentTurn !== currentTurn) {
+      setCurrentTurn(gameState.currentTurn);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (gameState && !gameState.gameOver) {
+      setHint('Thinking...');
+      fetchHint();
+    } else if (gameState && gameState.gameOver) {
       setHint('Game Over!');
-      return;
     }
-    setHint('Thinking...');
-    const fetchHint = async() => {
-      const hintResult = await Request_Clue(lobbyCode, currentTurn);
-      const cleanedHint = hintResult.replace(/['{}/]/g, '');
-      setHint(cleanedHint);
-    }
-    fetchHint();
-    // console.log(hint);
-  }, [currentTurn, gameOver]);
-  // setHint(Request_Clue(lobbyCode));
+  }, [currentTurn]);
+
+  const fetchHint = async () => {
+    const hintResult = await Request_Clue(lobbyCode);
+    const cleanedHint = hintResult.replace(/['{}/]/g, '');
+    setHint(cleanedHint);
+  };
 
   const [hintWord, hintCount, clueText] = hint ? hint.split(',', 3) : [null, null, null];
   // console.log(typeof hintWord);

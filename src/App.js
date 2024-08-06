@@ -32,19 +32,14 @@ const createLobby = async () => {
 
   function App() {
     const [lobbyCode, setLobbyCode] = useState(null);
-    const [currentTurn, setCurrentTurn] = useState('pink');
-    const [gameOver, setGameOver] = useState(false);
 
-    function endTurn(turn){
-      setCurrentTurn(turn === 'green' ? 'pink' : 'green');
-    }
 
     const GameRoute = () => {
       const { lobbyCode } = useParams();
       return (
         <div className="game-container">
-          <Game lobbyCode={lobbyCode} endTurn={endTurn} currentTurn={currentTurn} setCurrentTurn={setCurrentTurn} gameOver={gameOver} setGameOver={setGameOver} />
-          <ClueGiver lobbyCode={lobbyCode} currentTurn={currentTurn} gameOver={gameOver}/>
+          <Game lobbyCode={lobbyCode} />
+          <ClueGiver lobbyCode={lobbyCode} />
         </div>
       );
     };
