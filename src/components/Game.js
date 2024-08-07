@@ -129,7 +129,9 @@ const Game = ( { lobbyCode } ) => {
   };
 
   useEffect(() =>{
+    if (words.length > 0) {
       updateLobby(words, pinkLeft);
+    }
   } 
   , [words]);
   const updateLobby = async () => {
