@@ -14,7 +14,7 @@ import { callGeminiAPI } from './geminiApi';
   function App() {
     const [lobbyCode, setLobbyCode] = useState(null);
 
-    console.log(callGeminiAPI("Tell me a joke about programming"));
+    console.log(await callGeminiAPI("Tell me a joke about programming"));
 
     const GameRoute = () => {
       const { lobbyCode } = useParams();
