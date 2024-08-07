@@ -7,12 +7,14 @@ import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import { callGeminiAPI } from './geminiApi';
 
 
 
   function App() {
     const [lobbyCode, setLobbyCode] = useState(null);
 
+    console.log(callGeminiAPI("Tell me a joke about programming"));
 
     const GameRoute = () => {
       const { lobbyCode } = useParams();
