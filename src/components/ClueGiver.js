@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import './ClueGiver.css';
-import Request_Clue from '../geminiApi.js';
+import Request_Clue, { callGeminiAPI } from '../geminiApi.js';
 import {doc, onSnapshot} from 'firebase/firestore';
 import { firestore } from '../firebase';
 
@@ -38,6 +38,8 @@ const ClueGiver = ({ lobbyCode }) => {
 
   const fetchHint = async () => {
     const hintResult = await Request_Clue(lobbyCode);
+    const gemHint = await callGeminiAPI("Tell me a joke about programming");
+    console.log('GemHint:', gemHint);
     const cleanedHint = hintResult.replace(/['{}/]/g, '');
     setHint(cleanedHint);
   };
