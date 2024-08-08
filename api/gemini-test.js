@@ -13,10 +13,13 @@ export default async function handler(req, res) {
 
     // Get the model (Gemini Pro)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+    
+    console.log(req.body);
     // Get the prompt from the request body
     const { prompt } = req.body;
 
+    console.log(prompt);
+    
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
