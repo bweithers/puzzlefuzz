@@ -23,6 +23,7 @@ export default async function handler(req, res) {
 
     // Generate content
     const result = await model.generateContent(prompt);
+    console.log("Api call result: ", result);
     const response = await result.response;
     const text = response.text();
 
