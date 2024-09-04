@@ -8,9 +8,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("Gemini API Key: ", process.env.GOOGLE_GEMINI_API_KEY);
+    // console.log("Gemini API Key: ", process.env.GOOGLE_GEMINI_API_KEY);
     // Initialize the Google Generative AI with your API key
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY,);
 
     // Get the model (Gemini Pro)
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
