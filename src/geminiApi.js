@@ -71,6 +71,7 @@ export const callGeminiAPI = async (prompt) => {
     });
     const data = await response.json();
     console.log(data.result);
+    return data.result;
   } catch (error) {
     console.error('Error:', error);
   }
