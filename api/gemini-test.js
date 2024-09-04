@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log("Gemini API Key: ", process.env.GOOGLE_GEMINI_API_KEY);
     // Initialize the Google Generative AI with your API key
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
 
@@ -17,13 +18,10 @@ export default async function handler(req, res) {
     console.log(req.body);
     // Get the prompt from the request body
     const { prompt } = req.body;
-
     console.log(prompt);
-    
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
-
     // Generate content
     const result = await model.generateContent(prompt);
     console.log("Api call result: ", result);
@@ -34,6 +32,7 @@ export default async function handler(req, res) {
     res.status(200).json({ result: text });
   } catch (error) {
     console.error('Error:', error);
+    console.log(prompt);
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
 }
