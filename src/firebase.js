@@ -3,13 +3,11 @@ import {initializeApp}  from 'firebase/app';
 import { collection, getFirestore, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_Firebase_apiKey,
-  authDomain: process.env.REACT_APP_authDomain,
-  projectId: process.env.REACT_APP_projectId,
-  storageBucket: process.env.REACT_APP_storageBucket,
-  messagingSenderId: process.env.REACT_APP_messagingSenderId,
-  appId: process.env.REACT_APP_appId,
-  measurementId: process.env.REACT_APP_measurementId
+  apiKey: "AIzaSyB3DTe_zH3TdDTdHZuXrLzAsjcrodMYSps",
+  authDomain: "puzzlefuzz-5ce03.firebaseapp.com",
+  projectId: "puzzlefuzz-5ce03",
+  appId: "1:1034476288735:web:f99b413a7543117668c76a",
+  measurementId: "G-LVLMQXDXTH"
 };
 
 
