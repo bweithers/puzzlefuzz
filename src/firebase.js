@@ -1,5 +1,6 @@
 // src/firebase.js
 import {initializeApp}  from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { collection, getFirestore, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -27,8 +28,8 @@ export async function testFirebaseConnection() {
   }
 }
 const fb_app = initializeApp(firebaseConfig);
-
 export const firestore = getFirestore(fb_app);
+export const auth = getAuth(fb_app);
 
 async function get_collection(db) {
     const c = collection(db, 'test');
