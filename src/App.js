@@ -3,6 +3,7 @@ import './App.css';
 import Game from './components/Game';
 import Welcome from './components/Welcome';
 import ClueGiver from './components/ClueGiver';
+import AuthManager from './components/AuthManager';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
@@ -36,7 +37,9 @@ import { callGeminiAPI } from './geminiApi';
       <div className="App">
         <Router>
           <Routes>
-            <Route path="/" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} />
+
+            <Route path="/" element={< AuthManager/>} />
+            {/* <Route path="/" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} /> */}
             <Route path="/:lobbyCode" element={<GameRoute />} />
           </Routes>
         </Router>
