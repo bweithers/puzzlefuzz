@@ -1,7 +1,8 @@
 // src/components/AuthManager.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase'; 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 
 const AuthManager = () => {
   const [email, setEmail] = useState('');
@@ -20,6 +21,7 @@ const AuthManager = () => {
     }
   };
 
+  const navigate = useNavigate();
   // Handle Sign In
   const handleSignIn = async () => {
     try {
@@ -31,6 +33,21 @@ const AuthManager = () => {
       setError(err.message);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        navigate('/welcome');
+      } else {
+        setUser(null);
+      }
+      console.log('AuthStateChange');
+    });
+  
+    // Cleanup function
+    return () => unsubscribe();
+  }, []);
 
   // Handle Sign Out
   const handleSignOut = async () => {

@@ -37,9 +37,8 @@ import { callGeminiAPI } from './geminiApi';
       <div className="App">
         <Router>
           <Routes>
-
             <Route path="/" element={< AuthManager/>} />
-            {/* <Route path="/" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} /> */}
+            <Route path="/welcome" element={<Welcome lobbyCode={lobbyCode} setLobbyCode={setLobbyCode}/>} />
             <Route path="/:lobbyCode" element={<GameRoute />} />
           </Routes>
         </Router>
