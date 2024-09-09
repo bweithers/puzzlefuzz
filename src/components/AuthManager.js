@@ -85,6 +85,11 @@ const AuthManager = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSignIn();
+              }
+            }}
           />
           <button className="auth-button" onClick={handleSignUp}>Sign Up</button>
           <button className="auth-button" onClick={handleSignIn}>Sign In</button>

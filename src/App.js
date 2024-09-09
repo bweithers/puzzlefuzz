@@ -4,6 +4,7 @@ import Game from './components/Game';
 import Welcome from './components/Welcome';
 import ClueGiver from './components/ClueGiver';
 import AuthManager from './components/AuthManager';
+import SignOutButton from './components/SignOutButton';
 import { nanoid } from 'nanoid';
 import { firestore } from './firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
@@ -22,7 +23,7 @@ import { callGeminiAPI } from './geminiApi';
       };
       fetchJoke();
     }, []);
-    
+
     const GameRoute = () => {
       const { lobbyCode } = useParams();
       return (
@@ -35,6 +36,7 @@ import { callGeminiAPI } from './geminiApi';
 
     return (
       <div className="App">
+        <SignOutButton />
         <Router>
           <Routes>
             <Route path="/" element={< AuthManager/>} />
