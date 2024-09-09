@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase'; 
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import './AuthManager.css';
 
 const AuthManager = () => {
   const [email, setEmail] = useState('');
@@ -61,35 +62,38 @@ const AuthManager = () => {
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h2>Firebase Auth</h2>
 
       {user ? (
         <div>
-          <p>Welcome, {user.email}</p>
-          <button onClick={handleSignOut}>Sign Out</button>
+          <p className="auth-welcome">Welcome, {user.email}</p>
+          <button className="auth-button" onClick={handleSignOut}>Sign Out</button>
         </div>
       ) : (
         <div>
           <input
+            className="auth-input"
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
+            className="auth-input"
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={handleSignUp}>Sign Up</button>
-          <button onClick={handleSignIn}>Sign In</button>
+          <button className="auth-button" onClick={handleSignUp}>Sign Up</button>
+          <button className="auth-button" onClick={handleSignIn}>Sign In</button>
         </div>
       )}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="auth-error">{error}</p>}
     </div>
   );
 };
+
 export default AuthManager;
