@@ -91,8 +91,8 @@ const AuthManager = () => {
               }
             }}
           />
-          <button className="auth-button" onClick={handleSignUp}>Sign Up</button>
           <button className="auth-button" onClick={handleSignIn}>Sign In</button>
+          <button className="auth-button" onClick={handleSignUp}>Sign Up</button>
         </div>
       )}
 
