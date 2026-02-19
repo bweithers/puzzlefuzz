@@ -45,7 +45,7 @@ const Game = ({ lobbyCode }) => {
     });
 
     return () => unsubscribe();
-  }, [lobbyCode]);
+  }, [lobbyCode, docRef]);
 
   const updateLobby = async (updates) => {
     try {
