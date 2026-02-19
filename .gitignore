@@ -1,6 +1,8 @@
 node_modules
 *.log
 .env
+.env.local
+.env*.local
 *.cache
 *eslint*
 settings.json

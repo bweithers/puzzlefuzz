@@ -10,12 +10,14 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
   
   const navigate = useNavigate();
   const onJoinGame = async (code) => {
-    setLobbyCode(joinCode);
     const dbRef = collection(firestore, 'game-lobbies');
     const documentRef = doc(dbRef, code);
-    let gamedoc = await getDoc(documentRef);
-    console.log(joinCode,gamedoc.document_);
-    // navigate(`/${code}`);
+    const gamedoc = await getDoc(documentRef);
+    if (!gamedoc.exists()) {
+      alert('Game not found!');
+      return;
+    }
+    setLobbyCode(code);
   };
 
   const handleJoinGame = () => {
@@ -36,8 +38,7 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
     if (lobbyCode) {
       navigate(`/${lobbyCode}`);
     }
-  }, [lobbyCode]);
-  const history = useNavigate();
+  }, [lobbyCode, navigate]);
 
   const createLobby = async () => {
     // Create a new lobby

@@ -1,48 +1,56 @@
 import { React, useState, useEffect } from 'react';
 import './ClueGiver.css';
-import Request_Clue, { callGeminiAPI } from '../geminiApi.js';
+import Request_Clue from '../geminiApi.js';
 import {doc, onSnapshot} from 'firebase/firestore';
 import { firestore } from '../firebase';
 
 const ClueGiver = ({ lobbyCode }) => {
   const [hint, setHint] = useState(null);
   const [gameState, setGameState] = useState(null);
-  const [currentTurn, setCurrentTurn] = useState(null);
 
   useEffect(() => {
     const lobbyRef = doc(firestore, 'game-lobbies', lobbyCode);
     const unsubscribe = onSnapshot(lobbyRef, (doc) => {
       if (doc.exists()) {
-        const newGameState = doc.data();
-        setGameState(newGameState);
+        setGameState(doc.data());
       }
     });
 
     return () => unsubscribe();
   }, [lobbyCode]);
-  
-  useEffect(()=>{
-    if (gameState && gameState.currentTurn !== currentTurn) {
-      setCurrentTurn(gameState.currentTurn);
-    }
-  }, [gameState]);
 
   useEffect(() => {
-    if (gameState && !gameState.gameOver) {
-      setHint('Thinking...');
-      fetchHint();
-    } else if (gameState && gameState.gameOver) {
-      setHint('Game Over!');
-    }
-  }, [currentTurn]);
+    if (!gameState) return;
 
-  const fetchHint = async () => {
-    const hintResult = await Request_Clue(lobbyCode);
-    const gemHint = await callGeminiAPI("Tell me a joke about programming");
-    console.log('GemHint:', gemHint);
-    const cleanedHint = hintResult.replace(/['{}/]/g, '');
-    setHint(cleanedHint);
-  };
+    if (gameState.gameOver) {
+      setHint('Game Over!');
+      return;
+    }
+
+    let isMounted = true;
+    setHint('Thinking...');
+
+    const fetchHint = async () => {
+      try {
+        const hintResult = await Request_Clue(lobbyCode);
+        if (isMounted) {
+          const cleanedHint = hintResult.replace(/['{}/]/g, '');
+          setHint(cleanedHint);
+        }
+      } catch (error) {
+        console.error('Error fetching hint:', error);
+        if (isMounted) {
+          setHint('Error loading hint');
+        }
+      }
+    };
+
+    fetchHint();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [gameState?.currentTurn, lobbyCode]);
 
   const [hintWord, hintCount, clueText] = hint ? hint.split(',', 3) : [null, null, null];
   // console.log(typeof hintWord);
