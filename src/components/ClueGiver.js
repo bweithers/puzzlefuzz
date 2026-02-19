@@ -19,10 +19,13 @@ const ClueGiver = ({ lobbyCode }) => {
     return () => unsubscribe();
   }, [lobbyCode]);
 
-  useEffect(() => {
-    if (!gameState) return;
+  const currentTurn = gameState?.currentTurn ?? null;
+  const isGameOver = gameState?.gameOver ?? false;
 
-    if (gameState.gameOver) {
+  useEffect(() => {
+    if (currentTurn === null) return;
+
+    if (isGameOver) {
       setHint('Game Over!');
       return;
     }
@@ -50,9 +53,9 @@ const ClueGiver = ({ lobbyCode }) => {
     return () => {
       isMounted = false;
     };
-  }, [gameState?.currentTurn, lobbyCode]);
+  }, [currentTurn, isGameOver, lobbyCode]);
 
-  const [hintWord, hintCount, clueText] = hint ? hint.split(',', 3) : [null, null, null];
+  const [hintWord, hintCount] = hint ? hint.split(',', 3) : [null, null];
   // console.log(typeof hintWord);
   return (
     <div className="clue-giver">

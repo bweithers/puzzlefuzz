@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
@@ -12,7 +12,7 @@ const Game = ({ lobbyCode }) => {
   const [gameOver, setGameOver] = useState(false);
   const [currentTurn, setCurrentTurn] = useState('pink');
 
-  const docRef = doc(firestore, 'game-lobbies', lobbyCode);
+  const docRef = useMemo(() => doc(firestore, 'game-lobbies', lobbyCode), [lobbyCode]);
 
   // Single source of truth: all state comes from Firestore
   useEffect(() => {
