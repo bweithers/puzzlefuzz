@@ -2,6 +2,7 @@
   "name": "puzzlefuzz",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3002",
   "dependencies": {
     "@google/generative-ai": "^0.15.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -19,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev:api": "bun run dev-server.js"
   },
   "eslintConfig": {
     "extends": [
