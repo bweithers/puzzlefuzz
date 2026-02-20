@@ -2,7 +2,6 @@ import React, { useState , useEffect} from 'react';
 import './Welcome.css';
 import { firestore } from '../firebase';
 import { collection, getDoc, doc, setDoc } from 'firebase/firestore';
-import { nanoid } from 'nanoid';
 import { useNavigate } from 'react-router-dom';
 
 const Welcome = ({ lobbyCode, setLobbyCode }) => {
@@ -43,7 +42,7 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
   const createLobby = async () => {
     // Create a new lobby
       console.log('Creating lobby...');
-      const lobbyCode = nanoid(6); // Generate a 6-character lobby code
+      const lobbyCode = Math.random().toString(36).slice(2, 8).toUpperCase();
       const dbRef = collection(firestore, 'game-lobbies');
       try {
         const documentRef = doc(dbRef, lobbyCode);
