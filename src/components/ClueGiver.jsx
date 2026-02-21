@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ClueGiver.css';
 import Request_Clue from '../geminiApi.js';
 import {doc, onSnapshot} from 'firebase/firestore';

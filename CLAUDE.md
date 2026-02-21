@@ -4,22 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PuzzleFuzz is a multiplayer word association game (similar to Codenames) built with React and hosted on Firebase. Players guess words based on AI-generated clues from Google's Gemini API.
+PuzzleFuzz is a multiplayer word association game (similar to Codenames) built with React and hosted on Vercel. Players guess words based on AI-generated clues from Google's Gemini API.
 
-**Tech Stack:** React 18 + Firebase (Hosting & Firestore) + Vercel Serverless Functions + Gemini 1.5 Flash
+**Tech Stack:** React 18 + Firebase Firestore + Vite + Vercel Serverless Functions + Gemini 1.5 Flash
 
 ## Commands
 
 ```bash
-npm start         # Development server (http://localhost:3000)
-npm test          # Run tests in watch mode
-npm run build     # Production build to /build
+bun run dev       # Development server (http://localhost:3000)
+bun run dev:api   # API server for local development (http://localhost:3002)
+bun run build     # Production build to /build
+bun run preview   # Preview production build locally
 ```
 
 ## Architecture
 
 ```
-React SPA (Create React App)
+React SPA (Vite)
     │
     ├── Firestore (real-time game state sync)
     │   └── Collection: game-lobbies
@@ -46,8 +47,8 @@ React SPA (Create React App)
 
 | File | Purpose |
 |------|---------|
-| `src/components/Game.js` | Core game logic, word fetching, Firestore updates |
-| `src/components/ClueGiver.js` | Real-time listener, AI clue requests/display |
+| `src/components/Game.jsx` | Core game logic, word fetching, Firestore updates |
+| `src/components/ClueGiver.jsx` | Real-time listener, AI clue requests/display |
 | `src/firebase.js` | Firebase initialization |
 | `api/gemini-test.js` | Serverless endpoint for secure Gemini API calls |
 | `public/words.txt` | Word list (newline-separated) |
@@ -61,4 +62,4 @@ React SPA (Create React App)
 
 ## Deployment
 
-GitHub Actions auto-deploys on push to `main` (Firebase Hosting). PRs get preview deployments.
+GitHub Actions auto-deploys on push to `main` (Vercel). PRs get preview deployments.
