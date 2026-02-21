@@ -2,7 +2,6 @@ import React, { useState , useEffect} from 'react';
 import './Welcome.css';
 import { firestore } from '../firebase';
 import { collection, getDoc, doc, setDoc } from 'firebase/firestore';
-import { nanoid } from 'nanoid';
 import { useNavigate } from 'react-router-dom';
 
 const Welcome = ({ lobbyCode, setLobbyCode }) => {
@@ -10,12 +9,14 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
   
   const navigate = useNavigate();
   const onJoinGame = async (code) => {
-    setLobbyCode(joinCode);
     const dbRef = collection(firestore, 'game-lobbies');
     const documentRef = doc(dbRef, code);
-    let gamedoc = await getDoc(documentRef);
-    console.log(joinCode,gamedoc.document_);
-    // navigate(`/${code}`);
+    const gamedoc = await getDoc(documentRef);
+    if (!gamedoc.exists()) {
+      alert('Game not found!');
+      return;
+    }
+    setLobbyCode(code);
   };
 
   const handleJoinGame = () => {
@@ -36,13 +37,12 @@ const Welcome = ({ lobbyCode, setLobbyCode }) => {
     if (lobbyCode) {
       navigate(`/${lobbyCode}`);
     }
-  }, [lobbyCode]);
-  const history = useNavigate();
+  }, [lobbyCode, navigate]);
 
   const createLobby = async () => {
     // Create a new lobby
       console.log('Creating lobby...');
-      const lobbyCode = nanoid(6); // Generate a 6-character lobby code
+      const lobbyCode = Math.random().toString(36).slice(2, 8).toUpperCase();
       const dbRef = collection(firestore, 'game-lobbies');
       try {
         const documentRef = doc(dbRef, lobbyCode);

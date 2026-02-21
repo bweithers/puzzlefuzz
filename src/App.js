@@ -1,26 +1,12 @@
-import React, { useState, useEffect }from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Game from './components/Game';
 import Welcome from './components/Welcome';
 import ClueGiver from './components/ClueGiver';
-import { nanoid } from 'nanoid';
-import { firestore } from './firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import { callGeminiAPI } from './geminiApi';
 
-
-
-  function App() {
-    const [lobbyCode, setLobbyCode] = useState(null);
-
-    useEffect(() => {
-      const fetchJoke = async () => {
-        const joke = await callGeminiAPI("Tell me a joke about programming");
-        console.log(joke);
-      };
-      fetchJoke();
-    }, []);
+function App() {
+  const [lobbyCode, setLobbyCode] = useState(null);
     
     const GameRoute = () => {
       const { lobbyCode } = useParams();

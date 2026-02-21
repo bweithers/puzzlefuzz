@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY,);
 
     // Get the model (Gemini Pro)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
     
     console.log(req.body);
     // Get the prompt from the request body
