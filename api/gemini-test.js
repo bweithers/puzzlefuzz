@@ -7,6 +7,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  const { prompt } = req.body;
+
   try {
     // console.log("Gemini API Key: ", process.env.GOOGLE_GEMINI_API_KEY);
     // Initialize the Google Generative AI with your API key
@@ -14,10 +16,8 @@ export default async function handler(req, res) {
 
     // Get the model (Gemini Pro)
     const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-    
+
     console.log(req.body);
-    // Get the prompt from the request body
-    const { prompt } = req.body;
     console.log(prompt);
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
