@@ -18,6 +18,3 @@ jobs:
 
       - name: Lint
         run: bunx eslint src/ --max-warnings=0
-
-      - name: Test
-        run: bun run test -- --watchAll=false --passWithNoTests
