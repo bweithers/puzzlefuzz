@@ -4,6 +4,6 @@ node_modules
 .env.local
 .env*.local
 *.cache
-*eslint*
+build/
 settings.json
 .claude/*
