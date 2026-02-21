@@ -1,51 +1,45 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
-import { doc, updateDoc, onSnapshot } from "firebase/firestore";
+import { updateDoc, runTransaction } from "firebase/firestore";
 import { firestore } from '../firebase';
 
-const Game = ({ lobbyCode }) => {
-  const [words, setWords] = useState([]);
-  const [pinkLeft, setPinkLeft] = useState(8);
-  const [greenLeft, setGreenLeft] = useState(7);
-  const [winner, setWinner] = useState(null);
-  const [gameOver, setGameOver] = useState(false);
-  const [currentTurn, setCurrentTurn] = useState('pink');
+const Game = ({ lobbyCode, gameState, docRef }) => {
+  const words = gameState?.words ?? [];
+  const pinkLeft = gameState?.pinkLeft ?? 8;
+  const greenLeft = gameState?.greenLeft ?? 7;
+  const currentTurn = gameState?.currentTurn ?? 'pink';
+  const gameOver = gameState?.gameOver ?? false;
+  const winner = gameState?.winner ?? null;
 
-  const docRef = useMemo(() => doc(firestore, 'game-lobbies', lobbyCode), [lobbyCode]);
-
-  // Single source of truth: all state comes from Firestore
+  // Initialize game state in Firestore when lobby has no words yet.
   useEffect(() => {
-    const unsubscribe = onSnapshot(docRef, async (docSnap) => {
-      if (!docSnap.exists()) return;
+    if (!gameState) return;
+    if (gameState.words?.length > 0) return;
 
-      const data = docSnap.data();
-
-      if (!data.words || data.words.length === 0) {
-        // First player in — generate words and write to Firestore.
-        // onSnapshot will fire again with the new data.
+    const initialize = async () => {
+      try {
+        // fetchWordsAndSetup must run before the transaction — Firestore does not
+        // allow async calls between a transaction read and write.
         const newWords = await fetchWordsAndSetup();
-        await updateDoc(docRef, {
-          words: newWords,
-          currentTurn: 'pink',
-          pinkLeft: 8,
-          greenLeft: 7,
-          gameOver: false,
-          winner: null,
+        await runTransaction(firestore, async (t) => {
+          const snap = await t.get(docRef);
+          if (snap.data()?.words?.length > 0) return; // another player already initialized
+          t.update(docRef, {
+            words: newWords,
+            currentTurn: 'pink',
+            pinkLeft: 8,
+            greenLeft: 7,
+            gameOver: false,
+            winner: null,
+          });
         });
-        return;
+      } catch (error) {
+        console.error('Error initializing game:', error);
       }
-
-      setWords(data.words);
-      setPinkLeft(data.pinkLeft ?? 8);
-      setGreenLeft(data.greenLeft ?? 7);
-      setCurrentTurn(data.currentTurn ?? 'pink');
-      setGameOver(data.gameOver ?? false);
-      setWinner(data.winner ?? null);
-    });
-
-    return () => unsubscribe();
-  }, [lobbyCode, docRef]);
+    };
+    initialize();
+  }, [gameState, docRef]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateLobby = async (updates) => {
     try {
@@ -149,13 +143,16 @@ const Game = ({ lobbyCode }) => {
 
   return (
     <div className="Game">
-      <header className="App-header" onClick={resetGame}>
+      <header className="App-header">
         <h1>Puzzle Fuzz</h1>
       </header>
       <div className="info-holder">
         <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} endTurn={endTurn} />
       </div>
       <Board words={words} onWordClick={handleWordClick} gameOver={gameOver} />
+      {gameOver && (
+        <button className="reset-button" onClick={resetGame}>New Game</button>
+      )}
     </div>
   );
 };
