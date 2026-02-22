@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ClueGiver.css';
 import Request_Clue from '../geminiApi.js';
 
-const ClueGiver = ({ gameState }) => {
+const ClueGiver = ({ gameState, user }) => {
   const [hint, setHint] = useState(null);
 
   const currentTurn = gameState?.currentTurn ?? null;

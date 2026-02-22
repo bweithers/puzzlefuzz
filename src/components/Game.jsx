@@ -4,7 +4,7 @@ import ScoreTracker from './ScoreTracker';
 import { updateDoc, runTransaction } from "firebase/firestore";
 import { firestore } from '../firebase';
 
-const Game = ({ lobbyCode, gameState, docRef }) => {
+const Game = ({ lobbyCode, gameState, docRef, user }) => {
   const words = gameState?.words ?? [];
   const pinkLeft = gameState?.pinkLeft ?? 8;
   const greenLeft = gameState?.greenLeft ?? 7;

@@ -1,6 +1,7 @@
 // src/firebase.js
 import {initializeApp}  from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   authDomain: "puzzlefuzz-5ce03.firebaseapp.com",
@@ -13,3 +14,4 @@ const firebaseConfig = {
 const fb_app = initializeApp(firebaseConfig);
 
 export const firestore = getFirestore(fb_app);
+export const auth = getAuth(fb_app);
