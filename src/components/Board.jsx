@@ -6,13 +6,14 @@ const Board = ({ words, onWordClick, gameOver}) => {
   return (
     <div className={`board ${gameOver ? 'game-over' : ''}`}>
       {words.map((word, index) => (
-        <WordBox 
-          key={index} 
-          word={word.text} 
+        <WordBox
+          key={index}
+          word={word.text}
           color={word.color}
           revealed={word.revealed}
           onClick={() => onWordClick(index)}
           gameOver = {gameOver}
+          index={index}
         />
       ))}
     </div>

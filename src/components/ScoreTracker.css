@@ -2,68 +2,127 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   user-select: none;
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .score {
-  width: 150px;
-  height: 60px;
-  margin: 25px 150px 5px 150px;
+  width: 140px;
+  height: 70px;
+  margin: 8px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
+  border-radius: var(--radius-md);
   font-weight: bold;
-  background-color: whitesmoke;
+  background: rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .score.pink {
-  color: hotpink;
-  /* color: black; */
+  color: var(--wm-flesh-light);
+  border: 2px solid var(--wm-flesh);
+  box-shadow: inset 0 0 12px rgba(255, 59, 88, 0.15);
 }
 
 .score.green {
-  color: green;
-  /* color: white; */
+  color: var(--wm-green-team);
+  border: 2px solid var(--wm-green-team);
+  box-shadow: inset 0 0 12px rgba(46, 204, 113, 0.15);
+}
+
+.score.active {
+  animation: scorePulse 1.5s ease-in-out infinite;
+}
+
+.score.pink.active {
+  box-shadow: 0 0 20px rgba(255, 59, 88, 0.35), inset 0 0 12px rgba(255, 59, 88, 0.2);
+}
+
+.score.green.active {
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.35), inset 0 0 12px rgba(46, 204, 113, 0.2);
 }
 
 .value {
-  font-size: 22px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .label {
-  font-size: 24px;
-  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.8;
+  margin-bottom: 2px;
 }
 
 .GameStatus {
   text-align: center;
   flex-grow: 1;
-  background-color: whitesmoke;
+  background: transparent;
   width: 200px;
-  margin-top: 25px;
+  margin-top: 0;
   font-size: 12px;
+  color: var(--wm-white);
 }
 
 .status-value {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
+  font-family: var(--font-display);
 }
 
 .status-value.pink {
-  color: #ff69b4;
+  color: var(--wm-flesh-light);
 }
 
 .status-value.green {
-  color: #2ecc71;
+  color: var(--wm-green-team);
 }
 
-.status-value.game-over.green{
-  color: green;
+.status-value.game-over {
+  animation: gameOverPulse 2s ease-in-out infinite;
 }
-.status-value.game-over.pink{
-color: pink;
+
+.status-value.game-over.green {
+  color: var(--wm-green-team);
+}
+
+.status-value.game-over.pink {
+  color: var(--wm-flesh);
+}
+
+.end-turn-text {
+  color: rgba(240, 255, 240, 0.5);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes scorePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes gameOverPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }

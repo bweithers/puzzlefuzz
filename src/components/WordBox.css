@@ -1,84 +1,174 @@
 .word-box {
-    border: 1px solid #3f403f; /* Onyx */
-    padding: 20px;
-    margin: 0px;
-    text-align: center;
-    font-size: 16px;
-    background-color: #A9B18F; /* Sage */
-    color: #3f403f; /* Onyx */
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.125s ease;
-    transition: transform 0.5s, box-shadow 0.3s;
-    user-select: none;
-    /* transition: rotateY 0.3s ease-in-out; */
-    transform: rotateY(0deg);
-  }
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 14px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(180deg, var(--wm-white) 0%, #e0f0e0 100%);
+  color: var(--wm-seed);
+  width: 120px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  user-select: none;
+  position: relative;
+  animation: tileEntrance 0.4s ease-out both;
+  z-index: 1;
+}
 
-  @keyframes whiteToGreen {
-    0% {
-      background: white;
-    }
-    100% {
-      background: linear-gradient(to top, limegreen, green);
-    }
-  }
+/* Puzzle tab — small semicircle on right edge */
+.word-box::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 20px;
+  background: inherit;
+  border-radius: 0 12px 12px 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-left: none;
+  z-index: -1;
+}
 
+.word-box:hover {
+  background: var(--wm-highlight);
+  color: var(--wm-seed);
+  font-weight: 800;
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
 
-  .word-box:hover {
-    background-color: #3f403f; /* Rose */
-    color: white;
-    font-weight: bold;
-    transform: translate3d(-10px, -10px, 0);
-    box-shadow: 20px 20px 8px -5px papayawhip;
-  }  
-  .word-box.pink {
-    background-color: pink;
-    background: linear-gradient(to top, hotpink, pink);
-    animation: whiteToGradient 3s forwards;
-    font-weight: bold;
-  }
-  .word-box.pink:hover {
-    color: white;
-    transform: none;
-    box-shadow: none;
-  }
-  .word-box.green {
-    background-color: green;
-    color: white; /* For better visibility on green background */
-    transform: none;
-    box-shadow: none;
-    background: linear-gradient(to top, limegreen, green);
-    animation: whiteToGradient 3s forwards;
-    font-weight: bold;
-  }
-  .word-box.green:hover {
-    color: black;
-    transform: none;
-    box-shadow: none;
-  }
-  
-  .word-box.neutral {
-    background-color: #f0f0f0;
-    transform: none;
-    box-shadow: none;
-    font-weight: bold;
-  }
+/* ── Pink revealed ── */
+.word-box.pink {
+  background: linear-gradient(135deg, var(--wm-flesh) 0%, var(--wm-flesh-light) 100%);
+  color: var(--wm-white);
+  font-weight: 800;
+  border-color: var(--wm-flesh);
+  box-shadow: var(--shadow-glow-pink);
+  animation: revealFlip 0.6s ease-out;
+}
 
-  .word-box.neutral:hover{
-    color: black;
-    transform: none;
-    box-shadow: none;
-    font-weight: bold;
+.word-box.pink::after {
+  border-color: var(--wm-flesh);
+}
+
+.word-box.pink:hover {
+  transform: none;
+  box-shadow: var(--shadow-glow-pink);
+}
+
+/* ── Green revealed ── */
+.word-box.green {
+  background: linear-gradient(135deg, var(--wm-green-team-dark) 0%, var(--wm-green-team) 100%);
+  color: var(--wm-white);
+  font-weight: 800;
+  border-color: var(--wm-green-team);
+  box-shadow: var(--shadow-glow-green);
+  animation: revealFlip 0.6s ease-out;
+}
+
+.word-box.green::after {
+  border-color: var(--wm-green-team);
+}
+
+.word-box.green:hover {
+  transform: none;
+  box-shadow: var(--shadow-glow-green);
+}
+
+/* ── Neutral revealed ── */
+.word-box.neutral {
+  background: var(--wm-neutral);
+  color: var(--wm-seed-brown);
+  font-weight: 700;
+  border-color: #ddd;
+  box-shadow: none;
+  animation: shakeWrong 0.5s ease-out;
+}
+
+.word-box.neutral::after {
+  border-color: #ddd;
+}
+
+.word-box.neutral:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Bomb revealed ── */
+.word-box.bomb {
+  background: radial-gradient(circle at 40% 40%, #333 0%, #0a0a0a 100%);
+  color: #ff4444;
+  font-weight: 900;
+  border-color: #ff4444;
+  box-shadow: 0 0 24px rgba(255, 0, 0, 0.5);
+  animation: revealBomb 0.6s ease-out;
+}
+
+.word-box.bomb::after {
+  border-color: #ff4444;
+}
+
+.word-box.bomb:hover {
+  transform: none;
+  box-shadow: 0 0 24px rgba(255, 0, 0, 0.5);
+}
+
+/* ── Animations ── */
+@keyframes revealFlip {
+  0% {
+    transform: rotateY(90deg) scale(0.8);
+    opacity: 0.5;
   }
-  
-  .word-box.bomb {
-    background-color: black;
-    color: white;
-    transform: none;
-    box-shadow: none;
-    font-weight: bolder;
+  50% {
+    transform: rotateY(-10deg) scale(1.05);
   }
+  100% {
+    transform: rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shakeWrong {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes revealBomb {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes tileEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

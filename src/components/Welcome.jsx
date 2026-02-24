@@ -4,6 +4,8 @@ import { firestore, auth } from '../firebase';
 import { collection, getDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import HowToPlay from './HowToPlay';
+import PlayerStats from './PlayerStats';
 
 const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
   const [joinCode, setJoinCode] = useState('');
@@ -84,38 +86,52 @@ const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
 
   if (!user.displayName) {
     return (
-      <div className="welcome-screen">
-        <h1>Welcome to Puzzle Fuzz</h1>
-        <p>What should we call you?</p>
-        <input
-          type="text"
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
-          placeholder="Enter your name"
-          maxLength={20}
-          disabled={submitting}
-        />
-        <button onClick={handleNameSubmit} disabled={submitting || !nameInput.trim()}>
-          {submitting ? 'Setting up...' : "Let's Play"}
-        </button>
+      <div className="welcome-page">
+        <header className="App-header">
+          <h1>Puzzle Fuzz</h1>
+        </header>
+        <div className="welcome-screen">
+          <h1>Welcome to Puzzle Fuzz</h1>
+          <p>What should we call you?</p>
+          <input
+            type="text"
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
+            placeholder="Enter your name"
+            maxLength={20}
+            disabled={submitting}
+          />
+          <button onClick={handleNameSubmit} disabled={submitting || !nameInput.trim()}>
+            {submitting ? 'Setting up...' : "Let's Play"}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="welcome-screen">
-      <h1>Welcome to Puzzle Fuzz</h1>
-      <p>Playing as: {user.displayName}</p>
-      <button onClick={handleCreateGame}>Create New Game</button>
-      <div>
-        <input
-          type="text"
-          value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value)}
-          placeholder="Enter game code"
-        />
-        <button onClick={handleJoinGame}>Join Game</button>
+    <div className="welcome-page">
+      <header className="App-header">
+        <h1>Puzzle Fuzz</h1>
+      </header>
+      <div className="welcome-screen">
+        <h1>Welcome to Puzzle Fuzz</h1>
+        <p>Playing as: {user.displayName}</p>
+        <button onClick={handleCreateGame}>Create New Game</button>
+        <div>
+          <input
+            type="text"
+            value={joinCode}
+            onChange={(e) => setJoinCode(e.target.value)}
+            placeholder="Enter game code"
+          />
+          <button onClick={handleJoinGame}>Join Game</button>
+        </div>
+      </div>
+      <div className="welcome-extras">
+        <HowToPlay />
+        <PlayerStats user={user} setUser={setUser} />
       </div>
     </div>
   );

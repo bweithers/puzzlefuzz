@@ -3,8 +3,10 @@ import './App.css';
 import Game from './components/Game';
 import Welcome from './components/Welcome';
 import ClueGiver from './components/ClueGiver';
+import GameRules from './components/GameRules';
+import PlayerPresence from './components/PlayerPresence';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { firestore, auth } from './firebase';
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 
@@ -40,10 +42,25 @@ function App() {
       return () => unsubscribe();
     }, [docRef]);
 
+    // Write player presence to Firestore
+    useEffect(() => {
+      if (!user?.uid || !user?.displayName) return;
+      updateDoc(docRef, {
+        [`players.${user.uid}`]: {
+          displayName: user.displayName,
+          joinedAt: serverTimestamp(),
+        },
+      }).catch((err) => console.error('Error writing player presence:', err));
+    }, [docRef, user?.uid, user?.displayName]);
+
     return (
-      <div className="game-container">
-        <Game lobbyCode={lobbyCode} gameState={gameState} docRef={docRef} user={user} />
-        <ClueGiver gameState={gameState} user={user} />
+      <div className={`game-container ${gameState?.gameOver ? 'game-over' : ''}`}>
+        <Game lobbyCode={lobbyCode} gameState={gameState} docRef={docRef} user={user} setLobbyCode={setLobbyCode} />
+        <div className="game-sidebar">
+          <ClueGiver gameState={gameState} user={user} />
+          <GameRules />
+          <PlayerPresence players={gameState?.players} />
+        </div>
       </div>
     );
   };

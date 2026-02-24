@@ -25,7 +25,7 @@ const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, endT
 
   return (
     <div className="score-tracker" onClick={handleTurnSwitch}>
-      <div className="score pink">
+      <div className={`score pink ${currentTurn === 'pink' && !gameOver ? 'active' : ''}`}>
         <div className="label">Pink</div>
         <div className="value">{pinkLeft}</div>
       </div>
@@ -34,7 +34,7 @@ const ScoreTracker = ({ pinkLeft, greenLeft, currentTurn, gameOver, winner, endT
         {getStatusValue()}
       </div>
 
-      <div className="score green">
+      <div className={`score green ${currentTurn === 'green' && !gameOver ? 'active' : ''}`}>
         <div className="label">Green</div>
         <div className="value">{greenLeft}</div>
       </div>
