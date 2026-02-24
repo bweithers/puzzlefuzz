@@ -1,0 +1,95 @@
+.player-stats {
+  background: rgba(45, 90, 39, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(74, 124, 63, 0.3);
+  padding: 24px;
+  color: var(--wm-white);
+  flex: 1;
+  animation: fadeSlideUp 0.6s ease-out 0.3s both;
+}
+
+.player-stats h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 0 0 16px 0;
+  color: var(--wm-flesh-pale);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+.stat-value {
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--wm-white);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.edit-btn:hover {
+  opacity: 1;
+}
+
+.edit-row {
+  gap: 6px;
+}
+
+.edit-row input {
+  width: 100px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--wm-white);
+  font-size: 14px;
+  outline: none;
+}
+
+.edit-row input:focus {
+  border-color: var(--wm-flesh);
+}
+
+.edit-row button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--wm-white);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.edit-row button:first-of-type {
+  background: var(--wm-flesh);
+  border-color: var(--wm-flesh);
+}

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
+import GameToolbar from './GameToolbar';
 import { updateDoc, runTransaction } from "firebase/firestore";
 import { firestore } from '../firebase';
 
-const Game = ({ lobbyCode, gameState, docRef, user }) => {
+const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
   const words = gameState?.words ?? [];
   const pinkLeft = gameState?.pinkLeft ?? 8;
   const greenLeft = gameState?.greenLeft ?? 7;
@@ -146,6 +147,7 @@ const Game = ({ lobbyCode, gameState, docRef, user }) => {
       <header className="App-header">
         <h1>Puzzle Fuzz</h1>
       </header>
+      <GameToolbar lobbyCode={lobbyCode} displayName={user?.displayName} onGoHome={() => setLobbyCode(null)} />
       <div className="info-holder">
         <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} endTurn={endTurn} />
       </div>
