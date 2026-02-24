@@ -1,5 +1,11 @@
 // /api/gemini-test.js
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
+
+export const config = {
+  maxDuration: 30,
+};
+
+const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GEMINI_API_KEY });
 
 export default async function handler(req, res) {
   // Ensure this is a POST request
@@ -10,23 +16,18 @@ export default async function handler(req, res) {
   const { prompt } = req.body;
 
   try {
-    // console.log("Gemini API Key: ", process.env.GOOGLE_GEMINI_API_KEY);
-    // Initialize the Google Generative AI with your API key
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY,);
-
-    // Get the model (Gemini Pro)
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-
     console.log(req.body);
     console.log(prompt);
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
     // Generate content
-    const result = await model.generateContent(prompt);
+    const result = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+    });
     console.log("Api call result: ", result);
-    const response = await result.response;
-    const text = response.text();
+    const text = result.text;
 
     // Send the response
     res.status(200).json({ result: text });
