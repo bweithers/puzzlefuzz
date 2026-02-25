@@ -18,7 +18,19 @@
 }
 
 .clue-giver h2::before {
-  content: '🧩 ';
+  content: '\1F9E9 ';
+}
+
+.clue-agent-tag {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
 }
 
 .hint-box {
@@ -33,6 +45,7 @@
   white-space: pre-line;
   position: relative;
   overflow: hidden;
+  transition: box-shadow 0.3s ease;
 }
 
 .hint-box::before {
@@ -52,16 +65,88 @@
   font-size: 32px;
   font-weight: 600;
   color: var(--wm-seed);
-  animation: hintReveal 0.4s ease-out;
 }
 
-@keyframes hintReveal {
+/* ── Reveal flash ── */
+.hint-box-reveal {
+  animation: hintBoxFlash 0.8s ease-out;
+}
+
+@keyframes hintBoxFlash {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 59, 88, 0);
+  }
+  30% {
+    box-shadow: 0 0 30px rgba(255, 59, 88, 0.5), 0 0 60px rgba(255, 59, 88, 0.2);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+/* ── Clue word reveal ── */
+.hint-word-reveal {
+  animation: clueWordReveal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes clueWordReveal {
   0% {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.3);
   }
   100% {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ── Count slide up ── */
+.hint-count-reveal {
+  animation: clueCountReveal 0.5s ease-out 0.2s both;
+}
+
+@keyframes clueCountReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Thinking state ── */
+.clue-thinking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.clue-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--wm-flesh);
+  border-right-color: var(--wm-rind);
+  border-radius: 50%;
+  animation: spinnerRotate 0.8s linear infinite;
+}
+
+.clue-thinking-text {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--wm-seed);
+  opacity: 0.7;
+  animation: thinkingDots 1.5s ease-in-out infinite;
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes thinkingDots {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }

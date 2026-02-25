@@ -7,3 +7,4 @@ node_modules
 build/
 settings.json
 .claude/*
+scripts/service-account.json

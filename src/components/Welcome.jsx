@@ -6,6 +6,7 @@ import { updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import HowToPlay from './HowToPlay';
 import PlayerStats from './PlayerStats';
+import AgentMarketplace from './AgentMarketplace';
 
 const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
   const [joinCode, setJoinCode] = useState('');
@@ -33,17 +34,20 @@ const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
 
   const handleCreateGame = () => {
     createLobby().then(code => {
+      setIsCreator(true);
       setLobbyCode(code);
     }).catch(error => {
       console.error('Error creating lobby:', error);
     });
   };
 
+  const [isCreator, setIsCreator] = useState(false);
+
   useEffect(() => {
     if (lobbyCode) {
-      navigate(`/${lobbyCode}`);
+      navigate(isCreator ? `/${lobbyCode}/setup` : `/${lobbyCode}`);
     }
-  }, [lobbyCode, navigate]);
+  }, [lobbyCode, navigate, isCreator]);
 
   const createLobby = async () => {
     const lobbyCode = Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -128,11 +132,15 @@ const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
           />
           <button onClick={handleJoinGame}>Join Game</button>
         </div>
+        <button className="journal-nav-btn" onClick={() => navigate('/journal')}>
+          Clue Journal
+        </button>
       </div>
       <div className="welcome-extras">
         <HowToPlay />
         <PlayerStats user={user} setUser={setUser} />
       </div>
+      <AgentMarketplace user={user} />
     </div>
   );
 };

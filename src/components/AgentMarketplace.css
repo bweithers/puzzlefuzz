@@ -1,0 +1,30 @@
+.agent-marketplace {
+  background: rgba(45, 90, 39, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(74, 124, 63, 0.3);
+  padding: 24px;
+  color: var(--wm-white);
+  width: 100%;
+  animation: fadeSlideUp 0.6s ease-out 0.4s both;
+}
+
+.agent-marketplace h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 0 0 4px 0;
+  color: var(--wm-flesh-pale);
+}
+
+.marketplace-subtitle {
+  font-size: 13px;
+  opacity: 0.6;
+  margin: 0 0 16px 0;
+}
+
+.agent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

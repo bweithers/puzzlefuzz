@@ -1,0 +1,104 @@
+.agent-selector {
+  background: rgba(45, 90, 39, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  border: 1px solid rgba(74, 124, 63, 0.3);
+  color: var(--wm-white);
+}
+
+.agent-selector h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  color: var(--wm-flesh-pale);
+}
+
+.agent-selector-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--wm-white);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.agent-selector-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.agent-name {
+  font-weight: 700;
+}
+
+.agent-personality {
+  opacity: 0.6;
+  font-size: 12px;
+  flex: 1;
+  text-align: left;
+}
+
+.agent-chevron {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.agent-dropdown {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.agent-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--wm-white);
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.agent-option:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.agent-option.selected {
+  border-color: var(--wm-flesh);
+  background: rgba(255, 59, 88, 0.15);
+}
+
+.agent-option-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.agent-option-personality {
+  font-size: 11px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.agent-option-desc {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.3;
+}

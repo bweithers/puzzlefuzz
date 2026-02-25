@@ -1,0 +1,77 @@
+.game-setup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.setup-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin: 16px 0 0;
+}
+
+.setup-cards {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.setup-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  width: 280px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  animation: setupCardEntrance 0.5s ease-out both;
+}
+
+.setup-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.setup-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: var(--wm-flesh);
+  box-shadow: 0 8px 32px rgba(255, 59, 88, 0.2);
+}
+
+.setup-card-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.setup-card h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin: 0 0 8px;
+}
+
+.setup-card p {
+  font-size: 14px;
+  opacity: 0.7;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.setup-lobby-code {
+  font-size: 14px;
+  opacity: 0.5;
+  margin-top: 8px;
+}
+
+@keyframes setupCardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
