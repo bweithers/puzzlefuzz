@@ -1,17 +1,19 @@
-// scripts/seed-agents.js — Run with: node scripts/seed-agents.js
+// scripts/seed-agents.js — Run with: bun scripts/seed-agents.js
 // Seeds the Firestore `agents` collection with default agent personalities.
+// Uses Firebase Admin SDK with a service account to bypass security rules.
 
-import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3DTe_zH3TdDTdHZuXrLzAsjcrodMYSps",
-  authDomain: "puzzlefuzz-5ce03.firebaseapp.com",
-  projectId: "puzzlefuzz-5ce03",
-  appId: "1:1034476288735:web:f99b413a7543117668c76a",
-};
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const serviceAccount = JSON.parse(readFileSync(join(__dirname, 'service-account.json'), 'utf8'));
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({
+  credential: cert(serviceAccount),
+});
 const db = getFirestore(app);
 
 const agents = [
@@ -65,9 +67,9 @@ const agents = [
 async function seed() {
   for (const agent of agents) {
     const { id, ...data } = agent;
-    await setDoc(doc(db, 'agents', id), {
+    await db.collection('agents').doc(id).set({
       ...data,
-      createdAt: serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
       stats: {
         gamesPlayed: 0,
         wins: 0,
@@ -78,8 +80,11 @@ async function seed() {
     });
     console.log(`Seeded agent: ${data.name}`);
   }
-  console.log('Done!');
+  console.log('Done! Seeded %d agents.', agents.length);
   process.exit(0);
 }
 
-seed().catch(console.error);
+seed().catch((err) => {
+  console.error('Seed failed:', err);
+  process.exit(1);
+});
