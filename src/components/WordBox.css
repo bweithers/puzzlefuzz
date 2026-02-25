@@ -122,6 +122,23 @@
   box-shadow: 0 0 24px rgba(255, 0, 0, 0.5);
 }
 
+/* ── Thinking state (waiting for clue) ── */
+.word-box.thinking {
+  opacity: 0.55;
+  cursor: wait;
+  animation: tileEntrance 0.4s ease-out both, thinkingPulse 2s ease-in-out infinite;
+}
+
+.word-box.thinking:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes thinkingPulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.75; }
+}
+
 /* ── Animations ── */
 @keyframes revealFlip {
   0% {

@@ -1,7 +1,7 @@
 import React from 'react';
 import './AgentCard.css';
 
-const AgentCard = ({ agent, isSelected, onSelect }) => {
+const AgentCard = ({ agent, isSelected, onSelect, variant, index }) => {
   const stats = agent.stats || {};
   const winRate = stats.gamesPlayed > 0
     ? Math.round((stats.wins / stats.gamesPlayed) * 100)
@@ -11,9 +11,21 @@ const AgentCard = ({ agent, isSelected, onSelect }) => {
     ? Math.round(((stats.totalThumbsUp || 0) / totalVotes) * 100)
     : null;
 
+  const isFeatured = variant === 'featured';
+  const cardClass = [
+    'agent-card',
+    isFeatured && 'agent-card-featured',
+    isSelected && (isFeatured ? 'agent-card-featured-selected' : 'agent-card-selected'),
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={`agent-card ${isSelected ? 'agent-card-selected' : ''}`}>
-      <div className="agent-card-header">
+    <div
+      className={cardClass}
+      onClick={() => onSelect(agent.id)}
+      style={isFeatured && typeof index === 'number' ? { animationDelay: `${index * 0.08}s` } : undefined}
+    >
+      {isFeatured && <div className="agent-card-banner" />}
+      <div className={`agent-card-header ${isFeatured ? 'agent-card-header-featured' : ''}`}>
         <h4 className="agent-card-name">{agent.name}</h4>
         <span className="agent-card-personality">{agent.personality}</span>
       </div>
@@ -34,12 +46,14 @@ const AgentCard = ({ agent, isSelected, onSelect }) => {
           </div>
         )}
       </div>
-      <button
-        className={`agent-card-btn ${isSelected ? 'agent-card-btn-selected' : ''}`}
-        onClick={() => onSelect(agent.id)}
-      >
-        {isSelected ? 'Selected' : 'Select'}
-      </button>
+      {!isFeatured && (
+        <button
+          className={`agent-card-btn ${isSelected ? 'agent-card-btn-selected' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onSelect(agent.id); }}
+        >
+          {isSelected ? 'Selected' : 'Select'}
+        </button>
+      )}
     </div>
   );
 };

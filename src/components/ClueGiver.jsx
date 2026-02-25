@@ -4,8 +4,10 @@ import Request_Clue from '../geminiApi.js';
 import { doc, getDoc, updateDoc, arrayUnion, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
-const ClueGiver = ({ gameState, user, agentId, lobbyCode }) => {
+const ClueGiver = ({ gameState, user, agentId, lobbyCode, onClueReady }) => {
   const [hint, setHint] = useState(null);
+  const [isThinking, setIsThinking] = useState(false);
+  const [isRevealing, setIsRevealing] = useState(false);
   const [agentData, setAgentData] = useState(null);
   const [fewShotExamples, setFewShotExamples] = useState([]);
 
@@ -67,11 +69,16 @@ const ClueGiver = ({ gameState, user, agentId, lobbyCode }) => {
 
     if (isGameOver) {
       setHint('Game Over!');
+      setIsThinking(false);
+      onClueReady?.(true);
       return;
     }
 
     let isMounted = true;
-    setHint('Thinking...');
+    setHint(null);
+    setIsThinking(true);
+    setIsRevealing(false);
+    onClueReady?.(false);
 
     const fetchHint = async () => {
       try {
@@ -84,7 +91,15 @@ const ClueGiver = ({ gameState, user, agentId, lobbyCode }) => {
         if (isMounted) {
           const rawClue = hintResult;
           const cleanedHint = hintResult.replace(/['{}/]/g, '');
+          setIsThinking(false);
+          setIsRevealing(true);
           setHint(cleanedHint);
+          onClueReady?.(true);
+
+          // Clear reveal animation after it plays
+          setTimeout(() => {
+            if (isMounted) setIsRevealing(false);
+          }, 1200);
 
           // Parse clue word and count from cleaned hint
           const [parsedClue, parsedCount] = cleanedHint.split(',', 2).map(s => s?.trim());
@@ -117,6 +132,8 @@ const ClueGiver = ({ gameState, user, agentId, lobbyCode }) => {
         console.error('Error fetching hint:', error);
         if (isMounted) {
           setHint('Error loading hint');
+          setIsThinking(false);
+          onClueReady?.(true);
         }
       }
     };
@@ -134,10 +151,21 @@ const ClueGiver = ({ gameState, user, agentId, lobbyCode }) => {
     <div className="clue-giver">
       <h2>ClueGiver Hint</h2>
       {agentData && <span className="clue-agent-tag">{agentData.name}</span>}
-      <div className="hint-box">
-        {hint ? <p>{hintWord}</p> : <p>No hint available yet.</p>}
-        <br />
-        {hint ? <p>{hintCount}</p> : <p>-1</p>}
+      <div className={`hint-box ${isRevealing ? 'hint-box-reveal' : ''}`}>
+        {isThinking ? (
+          <div className="clue-thinking">
+            <div className="clue-spinner" />
+            <span className="clue-thinking-text">Thinking...</span>
+          </div>
+        ) : hint ? (
+          <>
+            <p className={isRevealing ? 'hint-word-reveal' : ''}>{hintWord}</p>
+            <br />
+            <p className={isRevealing ? 'hint-count-reveal' : ''}>{hintCount}</p>
+          </>
+        ) : (
+          <p>No hint available yet.</p>
+        )}
       </div>
     </div>
   );

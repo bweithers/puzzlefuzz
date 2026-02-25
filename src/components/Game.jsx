@@ -6,7 +6,7 @@ import { updateDoc, runTransaction, doc, increment } from "firebase/firestore";
 import { firestore } from '../firebase';
 import { fetchWordsAndSetup } from '../utils/words';
 
-const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
+const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode, clueReady }) => {
   const words = gameState?.words ?? [];
   const pinkLeft = gameState?.pinkLeft ?? 8;
   const greenLeft = gameState?.greenLeft ?? 7;
@@ -106,7 +106,7 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
   };
 
   const handleWordClick = (index) => {
-    if (gameOver || words[index].revealed) return;
+    if (gameOver || words[index].revealed || !clueReady) return;
 
     const clickedColor = words[index].color;
     const newWords = words.map((w, i) => i === index ? { ...w, revealed: true } : w);
@@ -155,7 +155,7 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
       <div className="info-holder">
         <ScoreTracker pinkLeft={pinkLeft} greenLeft={greenLeft} currentTurn={currentTurn} gameOver={gameOver} winner={winner} endTurn={endTurn} />
       </div>
-      <Board words={words} onWordClick={handleWordClick} gameOver={gameOver} />
+      <Board words={words} onWordClick={handleWordClick} gameOver={gameOver} clueReady={clueReady} />
       {gameOver && (
         <button className="reset-button" onClick={resetGame}>New Game</button>
       )}

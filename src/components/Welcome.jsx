@@ -34,17 +34,20 @@ const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
 
   const handleCreateGame = () => {
     createLobby().then(code => {
+      setIsCreator(true);
       setLobbyCode(code);
     }).catch(error => {
       console.error('Error creating lobby:', error);
     });
   };
 
+  const [isCreator, setIsCreator] = useState(false);
+
   useEffect(() => {
     if (lobbyCode) {
-      navigate(`/${lobbyCode}`);
+      navigate(isCreator ? `/${lobbyCode}/setup` : `/${lobbyCode}`);
     }
-  }, [lobbyCode, navigate]);
+  }, [lobbyCode, navigate, isCreator]);
 
   const createLobby = async () => {
     const lobbyCode = Math.random().toString(36).slice(2, 8).toUpperCase();
