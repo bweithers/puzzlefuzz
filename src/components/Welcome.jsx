@@ -6,6 +6,7 @@ import { updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import HowToPlay from './HowToPlay';
 import PlayerStats from './PlayerStats';
+import AgentMarketplace from './AgentMarketplace';
 
 const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
   const [joinCode, setJoinCode] = useState('');
@@ -128,11 +129,15 @@ const Welcome = ({ lobbyCode, setLobbyCode, user, setUser }) => {
           />
           <button onClick={handleJoinGame}>Join Game</button>
         </div>
+        <button className="journal-nav-btn" onClick={() => navigate('/journal')}>
+          Clue Journal
+        </button>
       </div>
       <div className="welcome-extras">
         <HowToPlay />
         <PlayerStats user={user} setUser={setUser} />
       </div>
+      <AgentMarketplace user={user} />
     </div>
   );
 };

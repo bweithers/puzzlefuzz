@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import Board from './Board';
 import ScoreTracker from './ScoreTracker';
 import GameToolbar from './GameToolbar';
-import { updateDoc, runTransaction } from "firebase/firestore";
+import { updateDoc, runTransaction, doc, increment } from "firebase/firestore";
 import { firestore } from '../firebase';
+import { fetchWordsAndSetup } from '../utils/words';
 
 const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
   const words = gameState?.words ?? [];
@@ -20,12 +21,10 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
 
     const initialize = async () => {
       try {
-        // fetchWordsAndSetup must run before the transaction — Firestore does not
-        // allow async calls between a transaction read and write.
         const newWords = await fetchWordsAndSetup();
         await runTransaction(firestore, async (t) => {
           const snap = await t.get(docRef);
-          if (snap.data()?.words?.length > 0) return; // another player already initialized
+          if (snap.data()?.words?.length > 0) return;
           t.update(docRef, {
             words: newWords,
             currentTurn: 'pink',
@@ -41,6 +40,45 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
     };
     initialize();
   }, [gameState, docRef]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track agent stats when game ends
+  useEffect(() => {
+    if (!gameOver || !winner || !gameState?.agentSelections) return;
+
+    const updateAgentStats = async () => {
+      const selections = gameState.agentSelections;
+      const updatedAgents = new Set();
+
+      for (const [, agentId] of Object.entries(selections)) {
+        if (updatedAgents.has(agentId)) continue;
+        updatedAgents.add(agentId);
+
+        try {
+          const agentRef = doc(firestore, 'agents', agentId);
+          await updateDoc(agentRef, {
+            'stats.gamesPlayed': increment(1),
+          });
+        } catch (error) {
+          console.error('Error updating agent stats:', error);
+        }
+      }
+
+      // Mark wins — for simplicity, all agents selected by any player get a win
+      // if the game had a winner. A more granular approach would track per-team.
+      for (const [, agentId] of Object.entries(selections)) {
+        try {
+          const agentRef = doc(firestore, 'agents', agentId);
+          await updateDoc(agentRef, {
+            'stats.wins': increment(1),
+          });
+        } catch {
+          // best-effort
+        }
+      }
+    };
+
+    updateAgentStats();
+  }, [gameOver, winner]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateLobby = async (updates) => {
     try {
@@ -63,42 +101,8 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode }) => {
       greenLeft: 7,
       gameOver: false,
       winner: null,
+      clueHistory: [],
     });
-  };
-
-  const fetchWordsAndSetup = async () => {
-    try {
-      const response = await fetch('/words.txt');
-      const text = await response.text();
-      const allWords = text.split('\n').filter(word => word.trim() !== '');
-
-      const selectedWords = [];
-      while (selectedWords.length < 20) {
-        const randomWord = allWords[Math.floor(Math.random() * allWords.length)];
-        if (!selectedWords.includes(randomWord)) {
-          selectedWords.push(randomWord);
-        }
-      }
-
-      const coloredWords = selectedWords.map((word, index) => {
-        let color;
-        if (index < 8) color = 'pink';
-        else if (index < 15) color = 'green';
-        else if (index < 19) color = 'neutral';
-        else color = 'bomb';
-        return { text: word, color, revealed: false };
-      });
-
-      for (let i = coloredWords.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [coloredWords[i], coloredWords[j]] = [coloredWords[j], coloredWords[i]];
-      }
-
-      return coloredWords;
-    } catch (error) {
-      console.error('Error fetching words:', error);
-      return [];
-    }
   };
 
   const handleWordClick = (index) => {

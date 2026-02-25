@@ -1,0 +1,216 @@
+.clue-journal-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  gap: 24px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.journal-container {
+  background: rgba(45, 90, 39, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(74, 124, 63, 0.3);
+  padding: 28px;
+  color: var(--wm-white);
+  width: 100%;
+  animation: fadeSlideUp 0.6s ease-out;
+}
+
+.journal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.journal-header h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin: 0;
+  color: var(--wm-flesh-pale);
+}
+
+.journal-back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--wm-white);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.journal-back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.journal-instructions {
+  font-size: 14px;
+  opacity: 0.7;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.journal-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.journal-word {
+  padding: 12px 8px;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wm-white);
+  transition: transform 0.15s, border-color 0.15s;
+  text-transform: uppercase;
+}
+
+.journal-word:hover {
+  transform: scale(1.05);
+}
+
+.journal-word.pink {
+  background: var(--wm-flesh);
+}
+
+.journal-word.green {
+  background: var(--wm-green-team);
+}
+
+.journal-word.neutral {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.journal-word.bomb {
+  background: var(--wm-seed);
+}
+
+.journal-word-selected {
+  border-color: var(--wm-highlight, #FFD700);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.journal-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.journal-clue-input {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--wm-white);
+  font-size: 15px;
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.journal-clue-input:focus {
+  border-color: var(--wm-flesh);
+}
+
+.journal-count-input {
+  width: 60px;
+  padding: 10px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--wm-white);
+  font-size: 15px;
+  font-family: var(--font-body);
+  outline: none;
+  text-align: center;
+}
+
+.journal-submit-btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, var(--wm-flesh) 0%, var(--wm-flesh-light, var(--wm-flesh)) 100%);
+  color: var(--wm-white);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.journal-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.journal-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.journal-new-btn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--wm-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.journal-new-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.journal-targets {
+  margin: 12px 0 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.journal-history {
+  margin-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+.journal-history h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin: 0 0 12px 0;
+  color: var(--wm-flesh-pale);
+}
+
+.journal-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.journal-entry-clue {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.journal-entry-targets {
+  font-size: 12px;
+  opacity: 0.6;
+}
