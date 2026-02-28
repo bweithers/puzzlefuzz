@@ -110,7 +110,7 @@ const Game = ({ lobbyCode, gameState, docRef, user, setLobbyCode, clueReady }) =
 
     const clickedColor = words[index].color;
     const newWords = words.map((w, i) => i === index ? { ...w, revealed: true } : w);
-    const revealAll = newWords.map(w => ({ ...w, revealed: true }));
+    const revealAll = newWords.map(w => w.revealed ? w : { ...w, revealed: true, autoRevealed: true });
 
     const updates = { words: newWords };
 

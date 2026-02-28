@@ -1,11 +1,11 @@
 import React from 'react';
 import './WordBox.css';
 
-const WordBox = ({ word, color, revealed, onClick, gameOver, index, clueReady }) => {
+const WordBox = ({ word, color, revealed, autoRevealed, onClick, gameOver, index, clueReady }) => {
   const isThinking = !clueReady && !gameOver && !revealed;
   return (
     <div
-      className={`word-box ${revealed ? color : ''} ${isThinking ? 'thinking' : ''}`}
+      className={`word-box ${revealed ? color : ''} ${isThinking ? 'thinking' : ''} ${autoRevealed ? 'auto-revealed' : ''}`}
       onClick={onClick}
       style={{
         cursor: gameOver || isThinking ? 'not-allowed' : 'pointer',
