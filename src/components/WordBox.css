@@ -122,6 +122,45 @@
   box-shadow: 0 0 24px rgba(255, 0, 0, 0.5);
 }
 
+/* ── Auto-revealed at game end (not guessed during play) ── */
+.word-box.auto-revealed {
+  opacity: 0.45;
+  filter: saturate(0.3) brightness(0.85);
+  box-shadow: none;
+  animation: autoRevealFade 0.8s ease-out;
+}
+
+.word-box.auto-revealed::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(0, 0, 0, 0.08) 6px,
+    rgba(0, 0, 0, 0.08) 8px
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.word-box.auto-revealed:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes autoRevealFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+}
+
 /* ── Thinking state (waiting for clue) ── */
 .word-box.thinking {
   opacity: 0.55;

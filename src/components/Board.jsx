@@ -11,6 +11,7 @@ const Board = ({ words, onWordClick, gameOver, clueReady }) => {
           word={word.text}
           color={word.color}
           revealed={word.revealed}
+          autoRevealed={word.autoRevealed}
           onClick={() => onWordClick(index)}
           gameOver={gameOver}
           index={index}

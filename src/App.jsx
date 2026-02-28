@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import confetti from 'canvas-confetti';
 import './App.css';
 import Game from './components/Game';
 import Welcome from './components/Welcome';
@@ -86,6 +87,51 @@ function App() {
       };
       loadDefault();
     }, [user?.uid, docRef, gameState?.agentSelections]);
+
+    const prevGameOver = useRef(false);
+
+    useEffect(() => {
+      if (gameState?.gameOver && !prevGameOver.current) {
+        // Fire a big confetti burst
+        const duration = 3000;
+        const end = Date.now() + duration;
+
+        const colors = gameState.winner === 'pink'
+          ? ['#ff3b58', '#ff7eb3', '#ffffff']
+          : ['#2ecc71', '#a8e6cf', '#ffffff'];
+
+        const frame = () => {
+          confetti({
+            particleCount: 4,
+            angle: 60,
+            spread: 70,
+            origin: { x: 0, y: 0.6 },
+            colors,
+          });
+          confetti({
+            particleCount: 4,
+            angle: 120,
+            spread: 70,
+            origin: { x: 1, y: 0.6 },
+            colors,
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        };
+        frame();
+
+        // Big center burst
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors,
+        });
+      }
+      prevGameOver.current = gameState?.gameOver ?? false;
+    }, [gameState?.gameOver, gameState?.winner]);
 
     const gameMode = gameState?.gameMode;
     const isFriendsMode = gameMode === 'friends';
