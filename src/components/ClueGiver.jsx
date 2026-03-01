@@ -85,7 +85,7 @@ const ClueGiver = ({ gameState, user, agentId, lobbyCode, onClueReady }) => {
         const hintResult = await Request_Clue(
           words,
           currentTurn,
-          agentData?.systemPrompt,
+          agentId,
           fewShotExamples.length > 0 ? fewShotExamples : undefined
         );
         if (isMounted) {

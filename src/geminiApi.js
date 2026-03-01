@@ -1,9 +1,9 @@
 // src/geminiApi.js
 
-const callGeminiAPI = async (prompt, systemPrompt) => {
+const callGeminiAPI = async (prompt, agentId) => {
   const body = { prompt };
-  if (systemPrompt) {
-    body.systemPrompt = systemPrompt;
+  if (agentId) {
+    body.agentId = agentId;
   }
   const response = await fetch('/api/gemini-test', {
     method: 'POST',
@@ -17,7 +17,7 @@ const callGeminiAPI = async (prompt, systemPrompt) => {
   return data.result;
 };
 
-const Request_Clue = async (words, turn, systemPrompt, fewShotExamples) => {
+const Request_Clue = async (words, turn, agentId, fewShotExamples) => {
   const wordsToPick = words
     .filter(word => word.color === turn && !word.revealed)
     .map(word => word.text);
@@ -43,7 +43,7 @@ const Request_Clue = async (words, turn, systemPrompt, fewShotExamples) => {
 
   prompt += `Words to pick: ${wordsToPickString}\nWords to avoid: ${wordsToAvoidString}`;
 
-  const responseText = await callGeminiAPI(prompt, systemPrompt);
+  const responseText = await callGeminiAPI(prompt, agentId);
   return responseText;
 };
 
